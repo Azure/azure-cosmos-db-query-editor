@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Azure/azure-cosmosdb-query-editor.git"
+    "url": "git+https://github.com/Azure/azure-cosmos-db-query-editor.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Azure/azure-cosmosdb-query-editor/issues"
+    "url": "https://github.com/Azure/azure-cosmos-db-query-editor/issues"
   },
-  "homepage": "https://github.com/Azure/azure-cosmosdb-query-editor#readme",
+  "homepage": "https://github.com/Azure/azure-cosmos-db-query-editor#readme",
   "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0"
