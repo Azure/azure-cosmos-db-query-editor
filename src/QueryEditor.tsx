@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import './QueryEditor.css';
 import { MongoQuery, QueryResult } from './messageContract';
 
-export interface AppProps {
+export interface QueryEditorProps {
   connectionId: string;
   databaseName: string;
   collectionName: string;
@@ -10,7 +10,7 @@ export interface AppProps {
   queryResult?: QueryResult;
 };
 
-const App = (props: AppProps) => {
+export const QueryEditor = (props: QueryEditorProps) => {
   const [query, setQuery] = useState<string>('{ "firstName": "Franklin" }');
   const [renderAsTree, setRenderAsTree] = useState(true);
 
@@ -70,5 +70,3 @@ const App = (props: AppProps) => {
     </div>
   );
 }
-
-export default App;

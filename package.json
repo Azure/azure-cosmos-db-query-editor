@@ -1,0 +1,35 @@
+{
+  "name": "azure-cosmos-db-query-editor",
+  "version": "0.1.0",
+  "description": "Query editor for Azure Cosmos DB frontends",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc && cp package.json README.md src/QueryEditor.css ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azure/azure-cosmosdb-query-editor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Azure/azure-cosmosdb-query-editor/issues"
+  },
+  "homepage": "https://github.com/Azure/azure-cosmosdb-query-editor#readme",
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "13.4.0",
+    "@types/jest": "^29.2.3",
+    "@types/react": "18.0.25",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "4.9.3"
+  }
+}

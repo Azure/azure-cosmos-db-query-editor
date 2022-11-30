@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import { QueryEditor } from './QueryEditor';
 
 test('renders learn react link', () => {
-  render(<App
+  render(<QueryEditor
     databaseName="databaseName"
     collectionName="collectionName"
     connectionId="connectionId"
