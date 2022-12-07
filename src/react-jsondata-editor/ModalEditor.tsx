@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { FocusEventHandler, useContext, useEffect, useState } from "react";
 import pointer from "json-pointer";
 import TypeOfValue from "./lib/TypeOfValue";
 import styles from "./lib/styles.module.css";
@@ -90,6 +90,8 @@ export default function ModalEditor({
             valueType={"string"}
             isInArray={true}
             isRoot={true}
+            saveField={() => false}
+            rerender={() => {}}
           />
         ) : valueType === "object" || field === undefined ? (
           <ObjectNodeEditor modalObj={modalObj} ObjKey={field} path={""} />
@@ -101,6 +103,8 @@ export default function ModalEditor({
             valueType={valueType}
             isInArray={isInArray}
             isRoot={true}
+            saveField={() => false}
+            rerender={() => {}}
           />
         )}
         <div className={styles.modalBtnContainer}>
@@ -311,7 +315,7 @@ function ModalObjectContainer({
         saveType={(type: string) => {
           setInputType(type);
         }}
-        saveField={saveField}
+        // saveField={saveField}
         rerender={rerender}
       />
     );
@@ -535,13 +539,13 @@ function BooleanEditor({
         <label className={styles.modalLabel}>Value</label>
         <select
           className={styles.modalBooleanInput}
-          value={inputValue}
+          value={+inputValue}
           onChange={(e) => {
             saveValue(e.target.value === "true");
           }}
         >
-          <option value={true}>true</option>
-          <option value={false}>false</option>
+          <option value={+true}>true</option>
+          <option value={+false}>false</option>
         </select>
       </div>
       <div className={styles.modalNoLabel}>
@@ -882,10 +886,14 @@ function ArrayEditor({
 
   // changes field if there is not the same field
   // when there is same field, returns previous field
-  function changeField(e) {
+  function changeField(e: any) {
+    if (!e) {
+      return;
+    }
+
     if (
       saveField(
-        e.target.value,
+        e.target?.value,
         pointer.get(modalObj, path + "/" + field),
         field
       )
@@ -986,10 +994,12 @@ function ArrayEditor({
                     field={key}
                     valueType={TypeOfValue(value)}
                     isInArray={true}
-                    render={render}
+                    // render={render}
+                    saveField={(inputField: string, inputValue: any, field: string)=>false}
                     rerender={() => {
                       setRender(!render);
                     }}
+                    isRoot={false}
                   />
                 </div>
               );
@@ -1047,6 +1057,7 @@ function ObjectNodeEditor({ modalObj, ObjKey, path }: { modalObj: any, ObjKey: s
     } else {
       return true;
     }
+    return false;
   }
 
   return (
@@ -1058,6 +1069,7 @@ function ObjectNodeEditor({ modalObj, ObjKey, path }: { modalObj: any, ObjKey: s
       isInArray={false}
       isRoot={false}
       saveField={saveField}
+      rerender={()=>{}}
     />
   );
 }
@@ -1150,10 +1162,11 @@ function ObjectEditor({
     }
 
     setRender(!render);
+    return false;
   }
 
-  function focusOutField(inputValue) {
-    if (ObjField !== inputValue) setObjField(ObjField);
+  function focusOutField(inputValue: any) {
+    if (ObjField !== inputValue) {setObjField(ObjField);}
   }
 
   // adds a child node
@@ -1248,7 +1261,7 @@ function ObjectEditor({
                     <ModalObjectContainer
                       modalObj={modalObj}
                       field={key}
-                      value={value}
+                      // value={value}
                       valueType={TypeOfValue(value)}
                       isInArray={false}
                       path={path + "/" + ObjField}
@@ -1256,6 +1269,7 @@ function ObjectEditor({
                       rerender={() => {
                         setRender(!render);
                       }}
+                      isRoot={false}
                     />
                   </div>
                 );
