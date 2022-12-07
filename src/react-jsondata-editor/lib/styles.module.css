@@ -1,0 +1,374 @@
+button{
+    cursor: pointer;
+}
+.container{
+    height: 100%;
+    width: 100%;
+}
+
+.editorContainer{
+    height: 100%;
+    width: 100%;
+}
+
+.overlay{
+    display: inline-block;
+    position: fixed;
+    z-index: 2;
+    background-color: rgba(255,255,255,.2);
+}
+
+.JsonViewOutput{
+    height: 100%;
+}
+
+.insertBanner{
+    padding: 5px 10px;
+    line-height: 30px;
+    font-size: 20px;
+}
+
+.bannerSpan{
+    padding: 2px 5px;
+    display: inline-block;
+}
+
+.insertBanner:hover{
+    cursor: pointer;
+}
+
+.jsonListOutput{
+    overflow-y: auto;
+    height: calc(100% - 44px);
+}
+
+.nodeEmpty{
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.indent{
+    padding-left: 0.5em;
+}
+
+.dataContainer{
+    width: 100%;
+}
+
+.dataNode{
+    position: relative;
+    min-height: 24px;
+}
+
+.clickNode{
+    display: flex;
+    padding: 0 0.5em;
+    cursor : pointer;
+}
+
+.needLeaf{
+    display: flex;
+    padding-left: 0.5em;
+}
+
+.dataNode .needLeaf:hover{
+    cursor: pointer;
+}
+
+.rightContainer{
+    display: flex;
+    position: absolute;
+    right: 0;
+    padding: 0 1em;
+    margin: 0 auto;
+}
+
+.rightButton{
+    padding-left: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.emptyObject{
+    display: flex;
+    padding: 0 0.5em;
+}
+
+.keyData{
+    display: flex;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-width: 50%;
+}
+
+.keySpace{
+    padding: 0 3px;
+}
+.arrayType + span{
+
+    background-color: #eeeeef;
+    border-radius: 2px;
+    padding: 0 5px;
+    text-align: center;
+
+}
+
+.valueData{
+    display: inline-block;
+    margin: auto 0;
+    word-break: break-word;
+}
+
+.arrow{
+    display: flex;
+    align-items: center;
+}
+.arrowDown{
+    margin-right: 8px;
+    border: solid #787878;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    cursor: pointer;
+}
+
+.arrowRight{
+    margin-right: 8px;
+    border: solid #787878;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    cursor: pointer;
+}
+
+.modalContainer {
+    margin-left: 1.5em;
+    box-sizing: border-box;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    background-color: white;
+    padding: 15px 5px 10px 15px;
+    position : absolute;
+    z-index: 3;
+    min-width: 425px;
+
+}
+
+.modalContentContainer {
+    display: flex;
+    margin-bottom: 0.5em;
+    min-width: 250px;
+}
+
+
+.modalLabel{
+    display: block;
+    font-size: 14px;
+    min-height: 20px;
+    line-height: 20px;
+    color: #797980;
+}
+
+.modalSelectLabel{
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    min-height: 20px;
+    line-height: 20px;
+    margin-top: 10px;
+    color: #797980;
+}
+
+.modalSelectBtnContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 10px 10px ;
+}
+
+.modalSelectBtn{
+    margin: 0 10px;
+    padding: 3px 30px;
+}
+.modalInput{
+    min-height: 30px;
+    font-size: 16px;
+    max-width: 140px;
+}
+
+.primitiveInput{
+    min-height: 30px;
+    font-size: 16px;
+    width: 385px;
+}
+
+select.modalInput{
+    height: 30px;
+}
+.modalBooleanInput{
+    min-height: 30px;
+    font-size: 16px;
+    min-width: 140px;
+}
+
+.modalNoLabel{
+    display: flex;
+    padding: 20px 5px 0;
+    min-height: 20px;
+    font-weight: bolder;
+    align-items: center;
+}
+
+.modalBtnContainer{
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    padding: 20px 20px 10px 10px ;
+}
+
+.modalModifyBtnContainer{
+    display: block;
+
+}
+.modalButton{
+    margin-left: 5px;
+}
+
+.delButton{
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.addButton{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.removeIcon {
+    color: #787878;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(1);
+    width: 22px;
+    height: 22px;
+    border: 2px solid;
+    border-radius: 22px
+}
+
+.removeIcon::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 5px;
+    top: 8px;
+    left: 4px
+}
+
+.addIcon {
+    color: #787878;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    width: 22px;
+    height: 22px;
+    border: 2px solid;
+    transform: scale(1);
+    border-radius: 22px
+}
+
+.addIcon::after,
+.addIcon::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 5px;
+    top: 8px;
+    left: 4px
+}
+
+.addIcon::after {
+    width: 2px;
+    height: 10px;
+    top: 4px;
+    left: 8px
+}
+
+.arrayIndex{
+    margin: 20px 5px 0;
+    font-size: 16px;
+}
+.arrayIndexInput{
+    display: flex;
+    min-height: 30px;
+    border-radius: 2px;
+    padding: 0 6px;
+    font-size: 16px;
+    background-color: #eeeeef;
+    text-align: center;
+    align-items: center;
+}
+
+.addLine{
+    display: flex;
+    margin-left: 10px;
+}
+
+.nodeLine{
+    width: 2px;
+    margin: -0.5em 0 18px;
+    border-right-style:solid ;
+    border-width: 0.15em;
+    border-color: #f0f0f0;
+}
+
+.nodePlusLineContainer{
+    display: flex;
+    flex-direction: row;
+}
+.nodePlusLine{
+    border-bottom-style: solid;
+    border-width: 0.15em;
+    border-color: #f0f0f0;
+    margin: 0 0 18px;
+    height: 20px;
+    width: 16px;
+}
+
+.listContainer{
+    display: flex;
+}
+
+.listLine{
+    height: 20px;
+    width: 16px;
+    margin-top: 14px;
+    border-bottom-style: solid;
+    border-width: 0.15em;
+    border-color: #f0f0f0;
+}
+
+.warning{
+    display: flex;
+    padding-left: 5px;
+}
+.warning span{
+    display: flex;
+    align-items: center;
+    color: rgba(255,0,0, 0.8);
+    font-style: italic;
+}

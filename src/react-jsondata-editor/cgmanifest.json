@@ -1,0 +1,15 @@
+{
+    "$schema": "https://json.schemastore.org/component-detection-manifest.json",
+    "Registrations": [
+        {
+            "Component": {
+                "Type": "git",
+                "git": {
+                  "RepositoryUrl": "https://github.com/putma-jun/react-jsondata-editor",
+                  "CommitHash": "0859af90ee657e83396ef7236aa105a1c073fac8"
+                }
+            },
+            "DevelopmentDependency": [false]
+        }
+    ]
+}
