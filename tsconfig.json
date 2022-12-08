@@ -7,7 +7,8 @@
     "outDir": "dist",
     "target": "es6",
     "module": "es6",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "isolatedModules": true,
   },
   "include": ["src"],
   "exclude": ["testapp/**/*", "testapp"]

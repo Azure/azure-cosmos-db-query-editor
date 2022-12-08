@@ -1,5 +1,6 @@
-export { QueryEditor, QueryEditorProps } from "./QueryEditor";
-export {
+export { QueryEditor } from "./QueryEditor";
+export type { QueryEditorProps } from "./QueryEditor";
+export type {
   MongoQuery,
   QuerEditorCommand,
   QueryEditorMessage,
