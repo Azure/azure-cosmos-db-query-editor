@@ -8,7 +8,9 @@ test("renders learn react link", () => {
       databaseName="databaseName"
       collectionName="collectionName"
       connectionId="connectionId"
-      onSubmitQuery={() => {}}
+      onSubmitQuery={() => {
+        // Noop
+      }}
     />
   );
   const linkElement = screen.getByText(/Query is/i);

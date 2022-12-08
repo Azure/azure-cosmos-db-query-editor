@@ -1,4 +1,9 @@
-import React, { FocusEventHandler, useContext, useEffect, useState } from "react";
+import React, {
+  FocusEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import pointer from "json-pointer";
 import TypeOfValue from "./lib/TypeOfValue";
 import styles from "./lib/styles.module.css";
@@ -91,7 +96,9 @@ export default function ModalEditor({
             isInArray={true}
             isRoot={true}
             saveField={() => false}
-            rerender={() => {}}
+            rerender={() => {
+              // Noop
+            }}
           />
         ) : valueType === "object" || field === undefined ? (
           <ObjectNodeEditor modalObj={modalObj} ObjKey={field} path={""} />
@@ -104,7 +111,9 @@ export default function ModalEditor({
             isInArray={isInArray}
             isRoot={true}
             saveField={() => false}
-            rerender={() => {}}
+            rerender={() => {
+              // Noop
+            }}
           />
         )}
         <div className={styles.modalBtnContainer}>
@@ -161,7 +170,12 @@ export default function ModalEditor({
 }
 
 // deletes node
-function removeNode(modalObj: any, path: string, inputField: string, isInArray: boolean) {
+function removeNode(
+  modalObj: any,
+  path: string,
+  inputField: string,
+  isInArray: boolean
+) {
   if (isInArray) {
     pointer.get(modalObj, path).splice(parseInt(inputField), 1);
     pointer.set(modalObj, path, DeepCopy(pointer.get(modalObj, path)));
@@ -214,12 +228,12 @@ function ModalObjectContainer({
 }: {
   modalObj: any;
   path: string;
-  field: string,
-  valueType: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveField: (inputField: string, inputValue: any, field: string) => boolean,
-  rerender: () => void,
+  field: string;
+  valueType: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveField: (inputField: string, inputValue: any, field: string) => boolean;
+  rerender: () => void;
 }) {
   const [inputType, setInputType] = useState(valueType);
 
@@ -347,14 +361,14 @@ function NullEditor({
   saveField,
   rerender,
 }: {
-  modalObj: any,
-  path: string,
-  field: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveType: (type: string) => void,
-  saveField: (inputField: string, inputValue: null, field: string) => boolean,
-  rerender: () => void,
+  modalObj: any;
+  path: string;
+  field: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveType: (type: string) => void;
+  saveField: (inputField: string, inputValue: null, field: string) => boolean;
+  rerender: () => void;
 }) {
   const [inputField, setInputField] = useState(field);
 
@@ -461,14 +475,18 @@ function BooleanEditor({
   saveField,
   rerender,
 }: {
-  modalObj: any,
-  path: string,
-  field: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveType: (type: string) => void,
-  saveField: (inputField: string, inputValue: boolean, field: string) => boolean,
-  rerender: () => void,
+  modalObj: any;
+  path: string;
+  field: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveType: (type: string) => void;
+  saveField: (
+    inputField: string,
+    inputValue: boolean,
+    field: string
+  ) => boolean;
+  rerender: () => void;
 }) {
   const [inputField, setInputField] = useState(field);
   const [inputValue, setInputValue] = useState(
@@ -589,14 +607,14 @@ function NumberEditor({
   saveField,
   rerender,
 }: {
-  modalObj: any,
-  path: string,
-  field: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveType: (type: string) => void,
-  saveField: (inputField: string, inputValue: number, field: string) => boolean,
-  rerender: () => void,
+  modalObj: any;
+  path: string;
+  field: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveType: (type: string) => void;
+  saveField: (inputField: string, inputValue: number, field: string) => boolean;
+  rerender: () => void;
 }) {
   const [inputField, setInputField] = useState(field);
   const [inputValue, setInputValue] = useState(
@@ -741,14 +759,14 @@ function StringEditor({
   saveField,
   rerender,
 }: {
-  modalObj: any,
-  path: string,
-  field: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveType: (type: string) => void,
-  saveField: (inputField: string, inputValue: string, field: string) => boolean,
-  rerender: () => void,
+  modalObj: any;
+  path: string;
+  field: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveType: (type: string) => void;
+  saveField: (inputField: string, inputValue: string, field: string) => boolean;
+  rerender: () => void;
 }) {
   const [inputField, setInputField] = useState(field);
   const [inputValue, setInputValue] = useState(
@@ -867,14 +885,14 @@ function ArrayEditor({
   saveField,
   rerender,
 }: {
-  modalObj: any,
-  path: string,
-  field: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveType: (type: string) => void,
-  saveField: (inputField: string, inputValue: string, field: string) => boolean,
-  rerender: () => void,
+  modalObj: any;
+  path: string;
+  field: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveType: (type: string) => void;
+  saveField: (inputField: string, inputValue: string, field: string) => boolean;
+  rerender: () => void;
 }) {
   const [render, setRender] = useState(false);
   const [arrayField, setArrayField] = useState(field);
@@ -995,7 +1013,11 @@ function ArrayEditor({
                     valueType={TypeOfValue(value)}
                     isInArray={true}
                     // render={render}
-                    saveField={(inputField: string, inputValue: any, field: string)=>false}
+                    saveField={(
+                      inputField: string,
+                      inputValue: any,
+                      field: string
+                    ) => false}
                     rerender={() => {
                       setRender(!render);
                     }}
@@ -1028,7 +1050,15 @@ function ArrayEditor({
  * @returns {JSX.Element}
  *
  */
-function ObjectNodeEditor({ modalObj, ObjKey, path }: { modalObj: any, ObjKey: string, path: string }) {
+function ObjectNodeEditor({
+  modalObj,
+  ObjKey,
+  path,
+}: {
+  modalObj: any;
+  ObjKey: string;
+  path: string;
+}) {
   const [field, setField] = useState("");
 
   // sets initial object
@@ -1037,7 +1067,11 @@ function ObjectNodeEditor({ modalObj, ObjKey, path }: { modalObj: any, ObjKey: s
   }
 
   // saves new field if there is no duplicate
-  function saveField(inputField: string, inputValue: any, currentField: string) {
+  function saveField(
+    inputField: string,
+    inputValue: any,
+    currentField: string
+  ) {
     if (!pointer.has(modalObj, path + "/" + ObjKey + "/" + inputField)) {
       if (inputValue instanceof Object) {
         pointer.set(
@@ -1069,7 +1103,9 @@ function ObjectNodeEditor({ modalObj, ObjKey, path }: { modalObj: any, ObjKey: s
       isInArray={false}
       isRoot={false}
       saveField={saveField}
-      rerender={()=>{}}
+      rerender={() => {
+        // Noop
+      }}
     />
   );
 }
@@ -1098,13 +1134,13 @@ function ObjectEditor({
   saveType,
   rerender,
 }: {
-  modalObj: any,
-  path: string,
-  field: string,
-  isInArray: boolean,
-  isRoot: boolean,
-  saveType: (type: string) => void,
-  rerender: () => void,
+  modalObj: any;
+  path: string;
+  field: string;
+  isInArray: boolean;
+  isRoot: boolean;
+  saveType: (type: string) => void;
+  rerender: () => void;
 }) {
   const [render, setRender] = useState(false);
   const [ObjField, setObjField] = useState(field);
@@ -1140,7 +1176,11 @@ function ObjectEditor({
   }
 
   // saves new field of child component if there is no duplicate
-  function saveField(inputField: string, inputValue: any, currentField: string) {
+  function saveField(
+    inputField: string,
+    inputValue: any,
+    currentField: string
+  ) {
     if (!pointer.has(modalObj, path + "/" + ObjField + "/" + inputField)) {
       if (inputValue instanceof Object) {
         pointer.set(
@@ -1166,7 +1206,9 @@ function ObjectEditor({
   }
 
   function focusOutField(inputValue: any) {
-    if (ObjField !== inputValue) {setObjField(ObjField);}
+    if (ObjField !== inputValue) {
+      setObjField(ObjField);
+    }
   }
 
   // adds a child node

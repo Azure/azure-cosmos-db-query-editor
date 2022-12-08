@@ -26,14 +26,14 @@ const JsonEditor = ({
 }: {
   jsonObject: any;
   onChange: (value: any) => void;
-  theme: any;
+  theme?: any;
   hideInsertObjectButton: boolean;
   expandToGeneration: number;
   isReadOnly: boolean;
-  bannerStyle: any;
-  keyStyle: any;
-  valueStyle: any;
-  buttonStyle: any;
+  bannerStyle?: any;
+  keyStyle?: any;
+  valueStyle?: any;
+  buttonStyle?: any;
 }): JSX.Element => {
   const jsonBoxRef = useRef<HTMLDivElement>(null);
   const defaultStyle = useContext(UserContext);

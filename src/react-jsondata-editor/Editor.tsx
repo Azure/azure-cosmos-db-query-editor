@@ -93,7 +93,7 @@ export default function Editor({
   };
 
   // delete json object
-  const deleteNode = (path: string): void => {
+  const deleteNode = (path: string | undefined): void => {
     if (path === "") {
       tempObj = undefined;
       saveJsonData(undefined);
@@ -146,7 +146,7 @@ export default function Editor({
     } else {
       if (path === "/") {
         if (jsonData instanceof Array) {
-          let arrayIndex = pointer.get(jsonData, "").length;
+          const arrayIndex = pointer.get(jsonData, "").length;
 
           Object.entries(value).map(([key, value]) => {
             pointer.set(tempObj, "/" + arrayIndex + "/" + key, value);

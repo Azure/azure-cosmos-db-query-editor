@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./QueryEditor.css";
 import { MongoQuery, QueryResult } from "./messageContract";
+import { JsonEditor } from "./react-jsondata-editor";
 
 export interface QueryEditorProps {
   connectionId: string;
@@ -55,9 +56,13 @@ export const QueryEditor = (props: QueryEditorProps) => {
         Text
         {queryResult && (
           <div>
-            <span>
-              Showing {offset} to {offset! + limit!} of {queryResult.total}{" "}
-            </span>
+            {offset !== undefined && limit !== undefined ? (
+              <span>
+                Showing {offset} to {offset + limit} of {queryResult.total}{" "}
+              </span>
+            ) : (
+              <span>Error offset or limit not specified</span>
+            )}
             <button
               disabled={queryResult.offset <= 0}
               onClick={() =>
@@ -87,13 +92,15 @@ export const QueryEditor = (props: QueryEditorProps) => {
             </button>
             {renderAsTree && (
               <div className="jsonEditor">
-                {/* <JsonEditor
+                <JsonEditor
                   jsonObject={JSON.stringify(queryResult.documents, null, "")}
-                  onChange={(output: any) => { console.log(output) }}
+                  onChange={(output: any) => {
+                    console.log(output);
+                  }}
                   hideInsertObjectButton={true}
                   expandToGeneration={0}
                   isReadOnly={true}
-                /> */}
+                />
               </div>
             )}
             {!renderAsTree && (

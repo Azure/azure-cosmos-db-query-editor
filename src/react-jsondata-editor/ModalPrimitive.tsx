@@ -9,7 +9,13 @@ import UserContext from "./UserContext";
  * @param savePrimitive modifies value
  * @returns {JSX.Element}
  */
-export default function ModalPrimitive({ primitiveValue, savePrimitive }) {
+export default function ModalPrimitive({
+  primitiveValue,
+  savePrimitive,
+}: {
+  primitiveValue: any;
+  savePrimitive: (inputValue?: any) => void;
+}) {
   const [inputValue, setInputValue] = useState(primitiveValue);
   const userStyle = useContext(UserContext);
 

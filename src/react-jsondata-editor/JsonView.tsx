@@ -90,7 +90,7 @@ export default function JsonView({
         className={styles.nodeEmpty}
         style={{ color: userStyle.values.string, font: userStyle.values.font }}
       >
-        It doesn't have any data
+        It doesn&apos;t have any data
       </div>
     );
   } else if (needLeaf && typeOfInput !== "object" && typeOfInput !== "array") {

@@ -17,6 +17,7 @@ export type QuerEditorCommand =
     };
 
 export interface QueryResult {
+  // estlint-disable @typescript-eslint/no-explicit-any
   documents: any[];
   total: number;
   offset: number;
