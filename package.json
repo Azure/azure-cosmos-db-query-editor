@@ -4,7 +4,7 @@
   "description": "Query editor for Azure Cosmos DB frontends",
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
