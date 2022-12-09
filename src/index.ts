@@ -1,2 +1,8 @@
-export { QueryEditor, QueryEditorProps } from "./QueryEditor";
-export { MongoQuery, QuerEditorCommand, QueryEditorMessage, QueryResult } from "./messageContract";
+export { QueryEditor } from "./QueryEditor";
+export type { QueryEditorProps } from "./QueryEditor";
+export type {
+  MongoQuery,
+  QuerEditorCommand,
+  QueryEditorMessage,
+  QueryResult,
+} from "./messageContract";
