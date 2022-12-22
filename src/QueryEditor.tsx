@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./QueryEditor.css";
 import { MongoQuery, QueryResult } from "./messageContract";
 import { JsonEditor } from "./react-jsondata-editor";
+import { IStackTokens, Stack } from "@fluentui/react/lib/Stack";
 
 export interface QueryEditorProps {
   connectionId: string;
@@ -31,65 +32,89 @@ export const QueryEditor = (props: QueryEditorProps) => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>Connection ID: {props.connectionId}</p>
-        <p>
-          Database: {props.databaseName} Collection: {props.collectionName}
-        </p>
-        <input value={query} onChange={(evt) => setQuery(evt.target.value)} />
-        <button onClick={() => handleSubmit(offset)}>Submit</button>
-        <input
-          type="radio"
-          name="renderJson"
-          value="tree"
-          checked={renderAsTree}
-          onChange={() => setRenderAsTree(true)}
-        />
-        Tree
-        <input
-          type="radio"
-          name="renderJson"
-          value="text"
-          checked={!renderAsTree}
-          onChange={() => setRenderAsTree(false)}
-        />
-        Text
+      <Stack
+        tokens={{
+          childrenGap: 10,
+          padding: 10,
+        }}
+      >
+        <div>
+          <h1>
+            {props.databaseName}.<small>{props.collectionName}</small>
+          </h1>
+        </div>
+        <Stack horizontal>
+          <input value={query} onChange={(evt) => setQuery(evt.target.value)} />
+          <button onClick={() => handleSubmit(offset)}>Submit</button>
+        </Stack>
+
         {queryResult && (
-          <div>
-            {offset !== undefined && limit !== undefined ? (
-              <span>
-                Showing {offset} to {offset + limit} of {queryResult.total}{" "}
-              </span>
-            ) : (
-              <span>Error offset or limit not specified</span>
-            )}
-            <button
-              disabled={queryResult.offset <= 0}
-              onClick={() =>
-                handleSubmit(
-                  offset !== undefined && limit !== undefined
-                    ? offset - limit
-                    : undefined
-                )
-              }
+          <>
+            <Stack
+              horizontal
+              tokens={{
+                childrenGap: 60,
+                padding: 10,
+              }}
             >
-              &#60;
-            </button>
-            <button
-              disabled={
-                queryResult.offset + queryResult.documents.length >=
-                queryResult.total
-              }
-              onClick={() =>
-                handleSubmit(
-                  offset !== undefined && limit !== undefined
-                    ? offset + limit
-                    : undefined
-                )
-              }
-            >
-              &#62;
-            </button>
+              <Stack horizontal tokens={{ childrenGap: 20 }}>
+                <input
+                  type="radio"
+                  name="renderJson"
+                  value="tree"
+                  checked={renderAsTree}
+                  onChange={() => setRenderAsTree(true)}
+                />
+                Tree
+                <input
+                  type="radio"
+                  name="renderJson"
+                  value="text"
+                  checked={!renderAsTree}
+                  onChange={() => setRenderAsTree(false)}
+                />
+                Text
+              </Stack>
+              <Stack horizontal tokens={{ childrenGap: 10 }}>
+                {offset !== undefined && limit !== undefined ? (
+                  <span>
+                    Showing {offset} to {offset + limit} of {queryResult.total}{" "}
+                  </span>
+                ) : (
+                  <span>Error offset or limit not specified</span>
+                )}
+
+                <div>
+                  <button
+                    disabled={queryResult.offset <= 0}
+                    onClick={() =>
+                      handleSubmit(
+                        offset !== undefined && limit !== undefined
+                          ? offset - limit
+                          : undefined
+                      )
+                    }
+                  >
+                    &#60;
+                  </button>
+                  <button
+                    disabled={
+                      queryResult.offset + queryResult.documents.length >=
+                      queryResult.total
+                    }
+                    onClick={() =>
+                      handleSubmit(
+                        offset !== undefined && limit !== undefined
+                          ? offset + limit
+                          : undefined
+                      )
+                    }
+                  >
+                    &#62;
+                  </button>
+                </div>
+              </Stack>
+            </Stack>
             {renderAsTree && (
               <div className="jsonEditor">
                 <JsonEditor
@@ -108,13 +133,13 @@ export const QueryEditor = (props: QueryEditorProps) => {
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}
-          </div>
+          </>
         )}
         {/* {props.queryResult && props.queryResult.map((r: any) => (
           <p key={r["_id"]}>{JSON.stringify(r)}</p>
           )
         )} */}
-      </header>
+      </Stack>
     </div>
   );
 };
