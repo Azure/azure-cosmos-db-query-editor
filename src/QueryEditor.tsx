@@ -3,6 +3,8 @@ import "./QueryEditor.css";
 import { MongoQuery, QueryResult } from "./messageContract";
 import { JsonEditor } from "./react-jsondata-editor";
 import { Stack } from "@fluentui/react/lib/Stack";
+import { TextField } from "@fluentui/react/lib/TextField";
+import { PrimaryButton } from "@fluentui/react/lib/Button";
 
 export interface QueryEditorProps {
   connectionId: string;
@@ -13,11 +15,11 @@ export interface QueryEditorProps {
 }
 
 export const QueryEditor = (props: QueryEditorProps) => {
-  const [query, setQuery] = useState<string>('{ }');
+  const [query, setQuery] = useState<string | undefined>("{ }");
   const [renderAsTree, setRenderAsTree] = useState(true);
 
   const handleSubmit = (offset: number | undefined) => {
-    if (props.connectionId && props.onSubmitQuery) {
+    if (query !== undefined && props.connectionId && props.onSubmitQuery) {
       props.onSubmitQuery(props.connectionId, {
         query,
         limit,
@@ -43,9 +45,15 @@ export const QueryEditor = (props: QueryEditorProps) => {
             {props.databaseName}.<small>{props.collectionName}</small>
           </h1>
         </div>
-        <Stack horizontal>
-          <input value={query} onChange={(evt) => setQuery(evt.target.value)} />
-          <button onClick={() => handleSubmit(offset)}>Submit</button>
+        <Stack horizontal verticalAlign="end">
+          <TextField
+            label="Enter query"
+            value={query}
+            onChange={(evt, newText: string | undefined) => setQuery(newText)}
+          />
+          <PrimaryButton onClick={() => handleSubmit(offset)}>
+            Submit
+          </PrimaryButton>
         </Stack>
 
         {queryResult && (
