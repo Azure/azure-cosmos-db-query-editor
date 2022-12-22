@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./QueryEditor.css";
 import { MongoQuery, QueryResult } from "./messageContract";
 import { JsonEditor } from "./react-jsondata-editor";
-import { IStackTokens, Stack } from "@fluentui/react/lib/Stack";
+import { Stack } from "@fluentui/react/lib/Stack";
 
 export interface QueryEditorProps {
   connectionId: string;
@@ -13,7 +13,7 @@ export interface QueryEditorProps {
 }
 
 export const QueryEditor = (props: QueryEditorProps) => {
-  const [query, setQuery] = useState<string>('{ "firstName": "Franklin" }');
+  const [query, setQuery] = useState<string>('{ }');
   const [renderAsTree, setRenderAsTree] = useState(true);
 
   const handleSubmit = (offset: number | undefined) => {
