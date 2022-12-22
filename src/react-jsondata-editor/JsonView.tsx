@@ -407,13 +407,13 @@ function ViewNode({
             e.stopPropagation();
             e.preventDefault();
 
-            if (isReadOnly) {
-              return;
-            }
-
             if (isList) {
               setShowContent(!showContent);
             } else {
+              if (isReadOnly) {
+                return;
+              }
+
               createEditModal(jsonPath, field, value, isInArray, inputRef);
             }
           }}
