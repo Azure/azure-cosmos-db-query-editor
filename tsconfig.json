@@ -9,6 +9,7 @@
     "module": "es6",
     "moduleResolution": "node",
     "isolatedModules": true,
+    "skipLibCheck": true,
   },
   "include": ["src"],
   "exclude": ["testapp/**/*", "testapp"]
