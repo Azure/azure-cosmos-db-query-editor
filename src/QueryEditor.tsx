@@ -51,9 +51,7 @@ export const QueryEditor = (props: QueryEditorProps) => {
             value={query}
             onChange={(evt, newText: string | undefined) => setQuery(newText)}
           />
-          <PrimaryButton onClick={() => handleSubmit(offset)}>
-            Submit
-          </PrimaryButton>
+          <PrimaryButton onClick={() => handleSubmit(0)}>Submit</PrimaryButton>
         </Stack>
 
         {queryResult && (
