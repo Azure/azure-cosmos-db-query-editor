@@ -10,6 +10,8 @@ export interface QueryEditorProps {
   connectionId: string;
   databaseName: string;
   collectionName: string;
+  queryInputLabel: string;
+  queryButtonLabel: string;
   onSubmitQuery: (connectionId: string, query: MongoQuery) => void;
   queryResult?: QueryResult;
 }
@@ -47,11 +49,13 @@ export const QueryEditor = (props: QueryEditorProps) => {
         </div>
         <Stack horizontal verticalAlign="end">
           <TextField
-            label="Enter query"
+            label={props.queryInputLabel}
             value={query}
             onChange={(evt, newText: string | undefined) => setQuery(newText)}
           />
-          <PrimaryButton onClick={() => handleSubmit(0)}>Submit</PrimaryButton>
+          <PrimaryButton onClick={() => handleSubmit(0)}>
+            {props.queryButtonLabel}
+          </PrimaryButton>
         </Stack>
 
         {queryResult && (
