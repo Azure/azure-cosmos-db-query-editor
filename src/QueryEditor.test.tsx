@@ -8,6 +8,8 @@ test("renders learn react link", () => {
       databaseName="databaseName"
       collectionName="collectionName"
       connectionId="connectionId"
+      queryButtonLabel="Submit"
+      queryInputLabel="Enter query"
       onSubmitQuery={() => {
         // Noop
       }}
