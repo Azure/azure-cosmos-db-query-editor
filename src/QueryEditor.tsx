@@ -1,10 +1,23 @@
 import React, { useState } from "react";
 import "./QueryEditor.css";
-import { MongoQuery, QueryResult } from "./messageContract";
 import { JsonEditor } from "./react-jsondata-editor";
 import { Stack } from "@fluentui/react/lib/Stack";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { PrimaryButton } from "@fluentui/react/lib/Button";
+
+export interface UserQuery {
+  query: string;
+  offset?: number;
+  limit?: number;
+}
+
+export interface QueryResult {
+  // estlint-disable @typescript-eslint/no-explicit-any
+  documents: any[];
+  total: number;
+  offset: number;
+  limit: number;
+}
 
 export interface QueryEditorProps {
   connectionId: string;
@@ -12,7 +25,7 @@ export interface QueryEditorProps {
   collectionName: string;
   queryInputLabel: string;
   queryButtonLabel: string;
-  onSubmitQuery: (connectionId: string, query: MongoQuery) => void;
+  onSubmitQuery: (connectionId: string, query: UserQuery) => void;
   queryResult?: QueryResult;
 }
 
