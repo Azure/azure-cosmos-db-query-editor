@@ -27,6 +27,7 @@ export interface QueryEditorProps {
   queryButtonLabel: string;
   onSubmitQuery: (connectionId: string, query: UserQuery) => void;
   queryResult?: QueryResult;
+  onResultUpdate?: (updatedData: any) => void;
 }
 
 export const QueryEditor = (props: QueryEditorProps) => {
