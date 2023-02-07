@@ -33,8 +33,10 @@ const queryEditorProps: QueryEditorProps = {
   connectionId: "",
   databaseName: "",
   collectionName: "",
+  defaultQueryText: "{}",
   queryInputLabel: "Enter query",
   queryButtonLabel: "Submit",
+  paginationType: "offset",
   onSubmitQuery
 };
 

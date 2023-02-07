@@ -10,6 +10,7 @@ test("renders learn react link", () => {
       connectionId="connectionId"
       queryButtonLabel="Submit"
       queryInputLabel="Enter query"
+      paginationType="infinite"
       onSubmitQuery={() => {
         // Noop
       }}
