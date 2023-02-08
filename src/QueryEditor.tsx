@@ -39,6 +39,7 @@ export interface QueryEditorProps {
   collectionName: string;
   queryInputLabel: string;
   queryButtonLabel: string;
+  loadMoreLabel?: string;
   defaultQueryText?: string;
   paginationType: "offset" | "infinite";
   onSubmitQuery: (connectionId: string, query: UserQuery) => void;
@@ -165,8 +166,17 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               </div>
             )}
             {props.paginationType === "infinite" && (
-              <Link href="" underline onClick={() => handleSubmit({})}>
-                Load more items
+              <Link
+                href=""
+                underline
+                onClick={() =>
+                  handleSubmit({
+                    continuationToken:
+                      queryResult.infinitePagingInfo?.continuationToken,
+                  })
+                }
+              >
+                {props.loadMoreLabel || "Load more items"}
               </Link>
             )}
           </>
