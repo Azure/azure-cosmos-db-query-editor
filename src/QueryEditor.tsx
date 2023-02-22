@@ -4,19 +4,33 @@ import { JsonEditor } from "./react-jsondata-editor";
 import { Stack } from "@fluentui/react/lib/Stack";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { PrimaryButton } from "@fluentui/react/lib/Button";
+import { Link } from "@fluentui/react";
 
 export interface UserQuery {
   query: string;
-  offset?: number;
-  limit?: number;
+  offsetPagingInfo?: {
+    limit?: number;
+    offset?: number;
+  };
+  infinitePagingInfo?: {
+    continuationToken?: string;
+    maxCount?: number;
+  };
 }
 
 export interface QueryResult {
   // estlint-disable @typescript-eslint/no-explicit-any
   documents: any[];
-  total: number;
-  offset: number;
-  limit: number;
+
+  offsetPagingInfo?: {
+    total: number;
+    offset: number;
+    limit: number;
+  };
+  infinitePagingInfo?: {
+    continuationToken: string;
+    maxCount?: number;
+  };
 }
 
 export interface QueryEditorProps {
@@ -25,28 +39,52 @@ export interface QueryEditorProps {
   collectionName: string;
   queryInputLabel: string;
   queryButtonLabel: string;
+  loadMoreLabel?: string;
+  defaultQueryText?: string;
+  paginationType: "offset" | "infinite";
   onSubmitQuery: (connectionId: string, query: UserQuery) => void;
   queryResult?: QueryResult;
   onResultUpdate?: (updatedData: any) => void;
 }
 
-export const QueryEditor = (props: QueryEditorProps) => {
-  const [query, setQuery] = useState<string | undefined>("{ }");
+export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
+  const [query, setQuery] = useState<string | undefined>(
+    props.defaultQueryText ?? ""
+  );
   const [renderAsTree, setRenderAsTree] = useState(true);
 
-  const handleSubmit = (offset: number | undefined) => {
+  const handleSubmit = (params: {
+    offset?: number;
+    continuationToken?: string;
+  }) => {
     if (query !== undefined && props.connectionId && props.onSubmitQuery) {
-      props.onSubmitQuery(props.connectionId, {
-        query,
-        limit,
-        offset,
-      });
+      switch (props.paginationType) {
+        case "infinite":
+          props.onSubmitQuery(props.connectionId, {
+            query: query,
+            infinitePagingInfo: {
+              continuationToken: params.continuationToken,
+              maxCount: props.queryResult?.infinitePagingInfo?.maxCount,
+            },
+          });
+          break;
+        case "offset":
+          props.onSubmitQuery(props.connectionId, {
+            query: query,
+            offsetPagingInfo: {
+              limit: props.queryResult?.offsetPagingInfo?.limit,
+              offset: params.offset,
+            },
+          });
+          break;
+        default:
+          // Do nothing
+          break;
+      }
     }
   };
 
   const { queryResult } = props;
-  const limit = props.queryResult?.limit;
-  const offset = props.queryResult?.offset;
 
   return (
     <div className="App">
@@ -67,7 +105,7 @@ export const QueryEditor = (props: QueryEditorProps) => {
             value={query}
             onChange={(evt, newText: string | undefined) => setQuery(newText)}
           />
-          <PrimaryButton onClick={() => handleSubmit(0)}>
+          <PrimaryButton onClick={() => handleSubmit({ offset: 0 })}>
             {props.queryButtonLabel}
           </PrimaryButton>
         </Stack>
@@ -99,45 +137,15 @@ export const QueryEditor = (props: QueryEditorProps) => {
                 />
                 Text
               </Stack>
-              <Stack horizontal tokens={{ childrenGap: 10 }}>
-                {offset !== undefined && limit !== undefined ? (
-                  <span>
-                    Showing {offset} to {offset + limit} of {queryResult.total}{" "}
-                  </span>
-                ) : (
-                  <span>Error offset or limit not specified</span>
-                )}
-
-                <div>
-                  <button
-                    disabled={queryResult.offset <= 0}
-                    onClick={() =>
-                      handleSubmit(
-                        offset !== undefined && limit !== undefined
-                          ? offset - limit
-                          : undefined
-                      )
-                    }
-                  >
-                    &#60;
-                  </button>
-                  <button
-                    disabled={
-                      queryResult.offset + queryResult.documents.length >=
-                      queryResult.total
-                    }
-                    onClick={() =>
-                      handleSubmit(
-                        offset !== undefined && limit !== undefined
-                          ? offset + limit
-                          : undefined
-                      )
-                    }
-                  >
-                    &#62;
-                  </button>
-                </div>
-              </Stack>
+              {props.paginationType === "offset" && (
+                <OffsetPaginator
+                  connectionId={props.connectionId}
+                  queryText={query}
+                  resultLength={queryResult.documents.length}
+                  onPageRequestSubmit={handleSubmit}
+                  offsetPagingInfo={props.queryResult?.offsetPagingInfo}
+                />
+              )}
             </Stack>
             {renderAsTree && (
               <div className="jsonEditor">
@@ -157,6 +165,20 @@ export const QueryEditor = (props: QueryEditorProps) => {
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}
+            {props.paginationType === "infinite" && (
+              <Link
+                href=""
+                underline
+                onClick={() =>
+                  handleSubmit({
+                    continuationToken:
+                      queryResult.infinitePagingInfo?.continuationToken,
+                  })
+                }
+              >
+                {props.loadMoreLabel || "Load more items"}
+              </Link>
+            )}
           </>
         )}
         {/* {props.queryResult && props.queryResult.map((r: any) => (
@@ -165,5 +187,67 @@ export const QueryEditor = (props: QueryEditorProps) => {
         )} */}
       </Stack>
     </div>
+  );
+};
+
+const OffsetPaginator = (props: {
+  connectionId: string;
+  queryText: string | undefined;
+  resultLength: number | undefined;
+  onPageRequestSubmit: (params: {
+    offset?: number;
+    continuationToken?: string;
+  }) => void;
+  offsetPagingInfo?: {
+    total: number;
+    offset: number;
+    limit: number;
+  };
+}): JSX.Element => {
+  if (!props.offsetPagingInfo || props.resultLength === undefined) {
+    return <></>;
+  }
+
+  const { limit, offset, total } = props.offsetPagingInfo;
+
+  return (
+    <Stack horizontal tokens={{ childrenGap: 10 }}>
+      {offset !== undefined && limit !== undefined ? (
+        <span>
+          Showing {offset} to {offset + limit} of {total}{" "}
+        </span>
+      ) : (
+        <span>Error offset or limit not specified</span>
+      )}
+
+      <div>
+        <button
+          disabled={offset <= 0}
+          onClick={() =>
+            props.onPageRequestSubmit({
+              offset:
+                offset !== undefined && limit !== undefined
+                  ? offset - limit
+                  : undefined,
+            })
+          }
+        >
+          &#60;
+        </button>
+        <button
+          disabled={offset + props.resultLength >= total}
+          onClick={() =>
+            props.onPageRequestSubmit({
+              offset:
+                offset !== undefined && limit !== undefined
+                  ? offset + limit
+                  : undefined,
+            })
+          }
+        >
+          &#62;
+        </button>
+      </div>
+    </Stack>
   );
 };
