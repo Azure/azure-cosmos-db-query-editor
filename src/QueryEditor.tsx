@@ -101,6 +101,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
         </div>
         <Stack horizontal verticalAlign="end">
           <TextField
+            className="queryInput"
             label={props.queryInputLabel}
             value={query}
             onChange={(evt, newText: string | undefined) => setQuery(newText)}
