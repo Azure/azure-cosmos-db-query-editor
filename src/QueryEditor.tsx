@@ -19,8 +19,7 @@ export interface UserQuery {
 }
 
 export interface QueryResult {
-  // estlint-disable @typescript-eslint/no-explicit-any
-  documents: any[];
+  documents: unknown[];
 
   offsetPagingInfo?: {
     total: number;
@@ -44,7 +43,7 @@ export interface QueryEditorProps {
   paginationType: "offset" | "infinite";
   onSubmitQuery: (connectionId: string, query: UserQuery) => void;
   queryResult?: QueryResult;
-  onResultUpdate?: (updatedData: any) => void;
+  onResultUpdate?: (updatedData: unknown) => void;
 }
 
 export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
@@ -152,7 +151,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               <div className="jsonEditor">
                 <JsonEditor
                   jsonObject={JSON.stringify(queryResult.documents, null, "")}
-                  onChange={(output: any) => {
+                  onChange={(output: unknown) => {
                     console.log(output);
                   }}
                   hideInsertObjectButton={true}

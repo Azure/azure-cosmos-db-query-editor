@@ -6,7 +6,7 @@ import React from "react";
  * @param input
  * @returns {string}
  */
-export default function TypeOfValue(input: any): string {
+export default function TypeOfValue(input: unknown): string {
   if (input === undefined) {
     return "undefined";
   } else if (input === null) {

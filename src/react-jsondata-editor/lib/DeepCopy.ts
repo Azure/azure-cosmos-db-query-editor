@@ -6,7 +6,7 @@
  *
  */
 
-export default function DeepCopy(input: any): any {
+export default function DeepCopy(input: unknown): any {
   if (input === undefined) {
     return undefined;
   } else if (input === null) {

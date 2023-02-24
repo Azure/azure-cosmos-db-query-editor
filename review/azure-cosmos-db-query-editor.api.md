@@ -20,7 +20,7 @@ export interface QueryEditorProps {
     // (undocumented)
     loadMoreLabel?: string;
     // (undocumented)
-    onResultUpdate?: (updatedData: any) => void;
+    onResultUpdate?: (updatedData: unknown) => void;
     // (undocumented)
     onSubmitQuery: (connectionId: string, query: UserQuery) => void;
     // (undocumented)
@@ -36,7 +36,7 @@ export interface QueryEditorProps {
 // @public (undocumented)
 export interface QueryResult {
     // (undocumented)
-    documents: any[];
+    documents: unknown[];
     // (undocumented)
     infinitePagingInfo?: {
         continuationToken: string;

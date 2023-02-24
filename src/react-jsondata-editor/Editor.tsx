@@ -29,7 +29,7 @@ export default function Editor({
 }: {
   input: string;
   jsonBoxRef: React.RefObject<HTMLDivElement>;
-  onChange: (value: any) => void;
+  onChange: (value: unknown) => void;
   hideInsertObjectButton: boolean;
   expandToGeneration: number;
   isReadOnly: boolean;
@@ -37,7 +37,7 @@ export default function Editor({
   const emptyValues: {
     path: string | undefined;
     field: string | undefined;
-    value: any | undefined;
+    value: unknown | undefined;
     isInArray: boolean | undefined;
   } = {
     path: undefined,
@@ -49,7 +49,7 @@ export default function Editor({
   // indicates y-scroll
   const jsonListOutput = useRef<HTMLDivElement>(null);
   // new json object to manipulate
-  const [jsonData, setJsonData] = useState<any>();
+  const [jsonData, setJsonData] = useState<unknown>();
   // blocks focus while a user edits
   const [overlay, setOverlay] = useState(false);
   // shows modal editor
@@ -74,7 +74,7 @@ export default function Editor({
   }, [input]);
 
   // calls onChange when data changes
-  const saveJsonData = (newData: any, deepCopy?: boolean): void => {
+  const saveJsonData = (newData: unknown, deepCopy?: boolean): void => {
     if (deepCopy) {
       setJsonData(DeepCopy(newData));
     } else {
@@ -84,7 +84,7 @@ export default function Editor({
     onChange(JSON.stringify(newData, null, " "));
   };
 
-  const toJSON = (jsonStr: string): any => {
+  const toJSON = (jsonStr: string): unknown => {
     try {
       return JSON.parse(jsonStr);
     } catch {
@@ -175,7 +175,7 @@ export default function Editor({
   const createModal = (
     path: string,
     field?: string,
-    value?: any,
+    value?: unknown,
     isInArray?: boolean,
     position?: number
   ): void => {
