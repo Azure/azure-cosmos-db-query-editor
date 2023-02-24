@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="react" />
-
 // @public (undocumented)
 export const QueryEditor: (props: QueryEditorProps) => JSX.Element;
 
