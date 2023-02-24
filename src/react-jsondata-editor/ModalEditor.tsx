@@ -27,7 +27,7 @@ export default function ModalEditor({
   deleteNode,
 }: {
   editObject: any;
-  changeNode: (path: string, obj: any) => void;
+  changeNode: (path: string, obj: unknown) => void;
   deleteNode: (path: string | undefined) => void;
 }) {
   const { path, field, value, isInArray } = editObject || {};
@@ -226,13 +226,17 @@ function ModalObjectContainer({
   saveField,
   rerender,
 }: {
-  modalObj: any;
+  modalObj: unknown;
   path: string;
   field: string;
   valueType: string;
   isInArray: boolean;
   isRoot: boolean;
-  saveField: (inputField: string, inputValue: any, field: string) => boolean;
+  saveField: (
+    inputField: string,
+    inputValue: unknown,
+    field: string
+  ) => boolean;
   rerender: () => void;
 }) {
   const [inputType, setInputType] = useState(valueType);
@@ -1015,7 +1019,7 @@ function ArrayEditor({
                     // render={render}
                     saveField={(
                       inputField: string,
-                      inputValue: any,
+                      inputValue: unknown,
                       field: string
                     ) => false}
                     rerender={() => {
@@ -1069,7 +1073,7 @@ function ObjectNodeEditor({
   // saves new field if there is no duplicate
   function saveField(
     inputField: string,
-    inputValue: any,
+    inputValue: unknown,
     currentField: string
   ) {
     if (!pointer.has(modalObj, path + "/" + ObjKey + "/" + inputField)) {
@@ -1205,7 +1209,7 @@ function ObjectEditor({
     return false;
   }
 
-  function focusOutField(inputValue: any) {
+  function focusOutField(inputValue: unknown) {
     if (ObjField !== inputValue) {
       setObjField(ObjField);
     }

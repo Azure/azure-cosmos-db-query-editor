@@ -43,7 +43,7 @@ export default function JsonView({
   createModal?: (
     jsonPath: string,
     field: string,
-    value: any,
+    value: unknown,
     isInArray: boolean,
     yoffset?: number
   ) => void;
@@ -360,7 +360,7 @@ function ViewNode({
     | ((
         jsonPath: string,
         field: string,
-        value: any,
+        value: unknown,
         isInArray: boolean,
         yoffset?: number
       ) => void)
