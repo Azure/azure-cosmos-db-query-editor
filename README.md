@@ -1,6 +1,37 @@
 # Azure Cosmos DB Query Editor
 This project contains a reusable query editor React component.
 
+# Basic Usage
+```typescript
+const queryEditorPropsInfinite: QueryEditorProps = {
+  connectionId: "connectionId",
+  databaseName: "myDatabase",
+  collectionName: "myCollection",
+  defaultQueryText: "select * from c",
+  queryInputLabel: "Enter query",
+  queryButtonLabel: "Submit",
+  paginationType: "infinite",
+  onSubmitQuery: (connectionId: string, query: UserQuery) => {
+    console.log(`A query has been submitted from the editor: ${query}`);
+  }
+};
+
+<QueryEditor {...queryEditorPropsOffset} />
+```
+
+## Parameters
+| Name | Description |
+|-|-|
+|`connectionId`| Provides context when running multiple query editors. A query editor is associated with a connection which is echoed in `onSubmitQuery`.|
+|`databaseName`| The Database name|
+|`collectionName`| The collection name|
+|`defaultQueryText`| (Optional) The default query that appears in the input box|
+|`loadMoreLabel`| (Optional) Label on the button to load more results|
+|`queryInputLabel`| The label for the query input box|
+|`queryButtonLabel`| The text on the submit button|
+|`paginationType`| `"offset"`: previous/next page buttons are displayed for paging through results. `"infinite"`: a "Load more results" button appears to load more results |
+|`onSubmitQuery`| Called when the Submit button is pressed|
+|`queryResult`| (Optional) The query result that the editor must display. It must be an array of json objects.|
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
