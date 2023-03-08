@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { QueryEditor, QueryEditorProps, UserQuery } from 'azure-cosmos-db-query-editor';
+import { QueryEditor, QueryEditorProps, UserQuery } from '@azure/cosmos-db-query-editor';
 import { QueryEditorCommand, QueryEditorMessage } from './messageContract';
 import { acquireVsCodeApi } from './vscodeMock';
 

@@ -19,8 +19,8 @@
     "type": "git",
     "url": "git+https://github.com/Azure/azure-cosmos-db-query-editor.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["azure", "query", "editor", "cosmosdb", "react", "reactjs"],
+  "author": "Azure Cosmos DB",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Azure/azure-cosmos-db-query-editor/issues"

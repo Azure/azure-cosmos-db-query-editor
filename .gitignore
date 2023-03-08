@@ -3,3 +3,4 @@ build/
 dist/
 .parcel-cache
 temp/
+azure-cosmos-query-editor-react-*.tgz
