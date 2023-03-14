@@ -39,7 +39,7 @@ jobs:
       - run: npm t
   publish:
     runs-on: ubuntu-latest
-    name: "Build"
+    name: "Build lib"
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x
