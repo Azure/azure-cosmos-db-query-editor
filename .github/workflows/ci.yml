@@ -14,8 +14,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - run: npm i
-      - run: npm run pretest
+      - run: npm i && npm run pretest
   lint:
     runs-on: ubuntu-latest
     name: "Format check and lint"
@@ -25,8 +24,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - run: npm i
-      - run: npm run format:check && npm run lint
+      - run: npm i && npm run format:check && npm run lint
   unittest:
     runs-on: ubuntu-latest
     name: "Unit Tests"
@@ -36,7 +34,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - run: npm t
+      - run: npm i && npm t
   publish:
     runs-on: ubuntu-latest
     name: "Build lib"
@@ -46,5 +44,4 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - run: npm i
-      - run: npm run build
+      - run: npm i && npm run build
