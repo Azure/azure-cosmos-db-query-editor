@@ -7,6 +7,9 @@ import JsonView from "./JsonView";
 import UserContext from "./UserContext";
 import ModalPrimitive from "./ModalPrimitive";
 
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Creates new JSON Object by copying a JSON Object
  * Manipulates new JSON Object and return the JSON Object to a user

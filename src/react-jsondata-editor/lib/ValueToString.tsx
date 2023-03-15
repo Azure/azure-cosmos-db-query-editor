@@ -1,5 +1,8 @@
 import React from "react";
 
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Turns primitive values into string.
  *

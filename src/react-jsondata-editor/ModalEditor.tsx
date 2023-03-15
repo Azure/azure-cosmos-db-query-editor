@@ -1,14 +1,12 @@
-import React, {
-  FocusEventHandler,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import pointer from "json-pointer";
 import TypeOfValue from "./lib/TypeOfValue";
 import styles from "./lib/styles.module.css";
 import DeepCopy from "./lib/DeepCopy";
 import UserContext from "./UserContext";
+
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // JSON Object type options for select
 const typeOptions = ["string", "number", "boolean", "null", "object", "array"];
@@ -1017,11 +1015,12 @@ function ArrayEditor({
                     valueType={TypeOfValue(value)}
                     isInArray={true}
                     // render={render}
-                    saveField={(
-                      inputField: string,
-                      inputValue: unknown,
-                      field: string
-                    ) => false}
+                    saveField={() =>
+                      // inputField: string,
+                      // inputValue: unknown,
+                      // field: string
+                      false
+                    }
                     rerender={() => {
                       setRender(!render);
                     }}

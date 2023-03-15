@@ -6,6 +6,9 @@
  *
  */
 
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function DeepCopy(input: unknown): any {
   if (input === undefined) {
     return undefined;

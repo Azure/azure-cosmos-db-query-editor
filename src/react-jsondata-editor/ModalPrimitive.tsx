@@ -2,6 +2,9 @@ import React, { useContext, useState } from "react";
 import styles from "./lib/styles.module.css";
 import UserContext from "./UserContext";
 
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Creates a modal when a user click JSON  primitive value
  *

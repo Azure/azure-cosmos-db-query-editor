@@ -1,5 +1,3 @@
-import React from "react";
-
 /**
  * Turns primitive types into string.
  *
