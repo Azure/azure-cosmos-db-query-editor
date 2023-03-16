@@ -3,6 +3,9 @@ import Editor from "./Editor";
 import styles from "./lib/styles.module.css";
 import UserContext from "./UserContext";
 
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Gets a JSON object and a callback function and calls Editor component
  * Creates a current reference and passes to Editor component

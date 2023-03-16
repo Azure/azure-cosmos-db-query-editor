@@ -1,0 +1,47 @@
+name: CI
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: "Compile TypeScript"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - run: npm i && npm run pretest
+  lint:
+    runs-on: ubuntu-latest
+    name: "Format check and lint"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - run: npm i && npm run format:check && npm run lint
+  unittest:
+    runs-on: ubuntu-latest
+    name: "Unit Tests"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - run: npm i && npm t
+  publish:
+    runs-on: ubuntu-latest
+    name: "Build lib"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - run: npm i && npm run build

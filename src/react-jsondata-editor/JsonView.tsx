@@ -5,6 +5,9 @@ import ValueToString from "./lib/ValueToString";
 import TypeOfValue from "./lib/TypeOfValue";
 import UserContext from "./UserContext";
 
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Displays nodes from the JSON Object
  * When a user clicks edit or add, calls createModal to create modal

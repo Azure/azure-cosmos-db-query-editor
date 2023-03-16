@@ -1,11 +1,14 @@
-import styles from "./lib/styles.module.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import styles from "./lib/styles.module.css";
 import DeepCopy from "./lib/DeepCopy";
 import pointer from "json-pointer";
 import ModalEditor from "./ModalEditor";
 import JsonView from "./JsonView";
 import UserContext from "./UserContext";
 import ModalPrimitive from "./ModalPrimitive";
+
+// TODO Remove this and fix the any's
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
  * Creates new JSON Object by copying a JSON Object
