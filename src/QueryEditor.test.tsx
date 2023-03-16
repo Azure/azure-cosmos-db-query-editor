@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { QueryEditor } from "./QueryEditor";
 
-test("renders learn react link", () => {
+test("renders query editor", () => {
   render(
     <QueryEditor
       databaseName="databaseName"
@@ -16,6 +16,6 @@ test("renders learn react link", () => {
       }}
     />
   );
-  const linkElement = screen.getByText(/Query is/i);
-  expect(linkElement).toBeInTheDocument();
+  const buttonElement = screen.getByText(/Submit/i);
+  expect(buttonElement).toBeInTheDocument();
 });

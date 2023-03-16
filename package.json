@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "clean": "rm -rf dist",
     "lint": "eslint src --ext ts,tsx",
     "format": "prettier --write \"{src,test}/**/*.{ts,tsx,html}\"",
@@ -19,7 +19,14 @@
     "type": "git",
     "url": "git+https://github.com/Azure/azure-cosmos-db-query-editor.git"
   },
-  "keywords": ["azure", "query", "editor", "cosmosdb", "react", "reactjs"],
+  "keywords": [
+    "azure",
+    "query",
+    "editor",
+    "cosmosdb",
+    "react",
+    "reactjs"
+  ],
   "author": "Azure Cosmos DB",
   "license": "MIT",
   "bugs": {
@@ -31,8 +38,8 @@
     "react-dom": "18.2.0"
   },
   "dependencies": {
-    "json-pointer": "0.6.2",
-    "@fluentui/react": "8.104.0"
+    "@fluentui/react": "8.104.0",
+    "json-pointer": "0.6.2"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.34.4",
@@ -40,16 +47,20 @@
     "@parcel/transformer-typescript-tsc": "^2.8.0",
     "@parcel/transformer-typescript-types": "^2.8.0",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "13.4.0",
-    "@types/jest": "^29.2.3",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.4.4",
     "@types/json-pointer": "1.0.31",
     "@types/react": "18.0.25",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.46.0",
     "eslint": "8.29.0",
     "eslint-plugin-react": "^7.31.11",
+    "jest": "^29.5.0",
+    "jest-css-modules-transform": "4.4.2",
+    "jest-environment-jsdom": "29.5.0",
     "parcel": "^2.8.0",
     "prettier": "2.8.0",
+    "ts-jest": "^29.0.5",
     "typescript": "4.9.4"
   }
 }

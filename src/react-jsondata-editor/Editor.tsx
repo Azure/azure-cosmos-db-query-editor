@@ -1,5 +1,5 @@
-import styles from "./lib/styles.module.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import styles from "./lib/styles.module.css";
 import DeepCopy from "./lib/DeepCopy";
 import pointer from "json-pointer";
 import ModalEditor from "./ModalEditor";
