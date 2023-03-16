@@ -10,38 +10,38 @@ jobs:
     name: "Compile TypeScript"
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
       - run: npm i && npm run pretest
   lint:
     runs-on: ubuntu-latest
     name: "Format check and lint"
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
       - run: npm i && npm run format:check && npm run lint
   unittest:
     runs-on: ubuntu-latest
     name: "Unit Tests"
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
       - run: npm i && npm t
   publish:
     runs-on: ubuntu-latest
     name: "Build lib"
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
       - run: npm i && npm run build
