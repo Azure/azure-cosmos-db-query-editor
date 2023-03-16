@@ -34,8 +34,8 @@
   },
   "homepage": "https://github.com/Azure/azure-cosmos-db-query-editor#readme",
   "peerDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "dependencies": {
     "@fluentui/react": "8.104.0",
