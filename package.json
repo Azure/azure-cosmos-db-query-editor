@@ -13,7 +13,8 @@
     "format:check": "prettier --check \"{src,test}/**/*.{ts,tsx,html}\"",
     "pretest": "tsc --noEmit && npm run lint && npm run format:check",
     "build": "npm run pretest && npm run clean && npx parcel build && api-extractor run --local && cp package.json README.md src/QueryEditor.css ./dist",
-    "extract-api": "tsc -p . && api-extractor run --local"
+    "extract-api": "tsc -p . && api-extractor run --local",
+    "publish": "npm run build && npm pack"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
     "@parcel/packager-ts": "^2.8.0",
     "@parcel/transformer-typescript-tsc": "^2.8.0",
     "@parcel/transformer-typescript-types": "^2.8.0",
+    "@parcel/transformer-css": "2.8.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.4.4",
