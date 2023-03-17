@@ -14,7 +14,7 @@ jobs:
 - job: Job_1
   displayName: CELA job
   pool:
-    vmImage: windows-latest
+    vmImage: windows-2019
   steps:
   - checkout: self
     clean: true
