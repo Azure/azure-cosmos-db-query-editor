@@ -25,7 +25,7 @@ jobs:
 - job: Job_2
   displayName: Build job
   pool:
-    vmImage: linux-latest
+    vmImage: ubuntu-latest
   steps:
   - checkout: self
     clean: true
