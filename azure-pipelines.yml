@@ -14,7 +14,7 @@ jobs:
 - job: Job_1
   displayName: CELA job
   pool:
-    vmImage: windows-2019
+    vmImage: windows-latest
   steps:
   - checkout: self
     clean: true
@@ -25,7 +25,7 @@ jobs:
 - job: Job_2
   displayName: Build job
   pool:
-    vmImage: windows-latest
+    vmImage: linux-latest
   steps:
   - checkout: self
     clean: true
@@ -33,49 +33,12 @@ jobs:
     inputs:
       versionSpec: '16.x'
     displayName: 'Install Node.js'
-  - script: npm install
+  - script: npm i
     displayName: 'npm install'
-  # DotNet Core needed for ESRP
-  - task: UseDotNet@2
-    inputs:
-      version: '6.x'
-
-  # Use for linux: xvfb-run -a yarn run test
-  # For some reason, azuredatastudio for linux does not execute the tests.
   - script: npm t
     displayName: 'Run unit tests'
   - script: npm pack
     displayName: 'Package'
-  # - task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@1
-  #   inputs:
-  #     ConnectedServiceName: 'ESRP Official Codesigning'
-  #     FolderPath: '$(Build.SourcesDirectory)'
-  #     Pattern: '*.vsix'
-  #     signConfigType: inlineSignParams
-  #     inlineOperation: |
-  #       [
-  #         {
-  #           "keyCode": "CP-233016",
-  #           "operationSetCode": "OpcSign",
-  #           "parameters": [
-  #             {
-  #               "parameterName": "FileDigest",
-  #               "parameterValue": "/fd \"SHA256\""
-  #             }
-  #           ],
-  #           "toolName": "sign",
-  #           "toolVersion": "1.0"
-  #         },
-  #         {
-  #           "keyCode": "CP-233016",
-  #           "operationSetCode": "OpcVerify",
-  #           "parameters": [],
-  #           "toolName": "sign",
-  #           "toolVersion": "1.0"
-  #         }
-  #       ]
-  #     SessionTimeout: 120
-  #   displayName: 'Signing tgz package'
   - task: AzureArtifacts.manifest-generator-task.manifest-generator-task.ManifestGeneratorTask@0
     displayName: 'SBOM'
     inputs:
