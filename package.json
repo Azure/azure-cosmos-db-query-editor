@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist  azure-cosmos-query-editor-react-*.tgz",
     "lint": "eslint src --ext ts,tsx",
     "format": "prettier --write \"{src,test}/**/*.{ts,tsx,html}\"",
     "format:check": "prettier --check \"{src,test}/**/*.{ts,tsx,html}\"",
