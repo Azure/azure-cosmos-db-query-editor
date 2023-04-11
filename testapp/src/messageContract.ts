@@ -1,27 +1,36 @@
+type ResultOffsetPagingInfo = {
+  kind: "offset";
+  total: number;
+  offset: number;
+  limit: number;
+};
+
+type ResultInfinitePaginInfo = {
+  kind: "infinite";
+  continuationToken: string;
+  maxCount?: number;
+};
+
+type QueryOffsetPagingInfo = {
+  kind: "offset";
+  limit?: number;
+  offset?: number;
+};
+
+type QueryInfinitePaginInfo = {
+  kind: "infinite";
+  continuationToken?: string;
+  maxCount?: number;
+};
+
 export interface EditorUserQuery {
   query: string;
-  offsetPagingInfo?: {
-    limit?: number;
-    offset?: number;
-  };
-  infinitePagingInfo?: {
-    continuationToken?: string;
-    maxCount?: number;
-  };
+  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
 }
 
 export interface EditorQueryResult {
-  // estlint-disable @typescript-eslint/no-explicit-any
-  documents: any[];
-  offsetPagingInfo?: {
-    total: number;
-    offset: number;
-    limit: number;
-  };
-  infinitePagingInfo?: {
-    continuationToken: string;
-    maxCount?: number;
-  };
+  documents: unknown[];
+  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
 }
 
 /**

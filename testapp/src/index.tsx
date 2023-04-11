@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { QueryEditor, QueryEditorProps, UserQuery } from '@azure/cosmos-query-editor-react';
+import { QueryEditor, QueryEditorProps, QueryInfinitePaginInfo, UserQuery } from '@azure/cosmos-query-editor-react';
 import { QueryEditorCommand, QueryEditorMessage } from './messageContract';
 import { acquireVsCodeApi } from './vscodeMock';
 
@@ -33,24 +33,24 @@ const Bootstrapper = (props: { onReady: () => void }) => {
 const queryEditorPropsOffset: QueryEditorProps = {
   connectionId: "",
   databaseName: "",
-  collectionName: "",
+  containerName: "",
   defaultQueryText: "{}",
   queryInputLabel: "Enter query",
   queryButtonLabel: "Submit",
-  paginationType: "offset",
+  pagingType: "offset",
   onSubmitQuery
 };
 
 const queryEditorPropsInfinite: QueryEditorProps = {
   connectionId: "",
   databaseName: "",
-  collectionName: "",
+  containerName: "",
   defaultQueryText: "{}",
   queryInputLabel: "Enter query",
   queryButtonLabel: "Submit",
-  paginationType: "infinite",
+  pagingType: "infinite",
   onSubmitQuery: (connectionId: string, query: UserQuery) => {
-    if (queryEditorPropsInfinite.queryResult && query.infinitePagingInfo?.continuationToken === undefined) {
+    if (queryEditorPropsInfinite.queryResult && (query.pagingInfo as QueryInfinitePaginInfo)?.continuationToken === undefined) {
       queryEditorPropsInfinite.queryResult = undefined;
     }
     return onSubmitQuery(connectionId, query);
@@ -66,11 +66,11 @@ window.addEventListener('message', event => {
     case "initialize":
       queryEditorPropsOffset.connectionId = JSON.stringify(message.data);
       queryEditorPropsOffset.databaseName = message.data.databaseName;
-      queryEditorPropsOffset.collectionName = message.data.collectionName;
+      queryEditorPropsOffset.containerName = message.data.collectionName;
 
       queryEditorPropsInfinite.connectionId = JSON.stringify(message.data);
       queryEditorPropsInfinite.databaseName = message.data.databaseName;
-      queryEditorPropsInfinite.collectionName = message.data.collectionName;
+      queryEditorPropsInfinite.containerName = message.data.collectionName;
       break;
     case "queryResult":
       queryEditorPropsOffset.queryResult = message.data;
