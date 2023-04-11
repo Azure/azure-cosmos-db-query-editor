@@ -4,65 +4,62 @@
 
 ```ts
 
-// @public (undocumented)
+// @public
 export const QueryEditor: (props: QueryEditorProps) => JSX.Element;
 
-// @public (undocumented)
+// @public
 export interface QueryEditorProps {
-    // (undocumented)
-    collectionName: string;
-    // (undocumented)
     connectionId: string;
-    // (undocumented)
+    containerName: string;
     databaseName: string;
-    // (undocumented)
     defaultQueryText?: string;
-    // (undocumented)
     loadMoreLabel?: string;
-    // (undocumented)
     onResultUpdate?: (updatedData: unknown) => void;
-    // (undocumented)
     onSubmitQuery: (connectionId: string, query: UserQuery) => void;
-    // (undocumented)
-    paginationType: "offset" | "infinite";
-    // (undocumented)
+    pagingType: "offset" | "infinite";
     queryButtonLabel: string;
-    // (undocumented)
     queryInputLabel: string;
-    // (undocumented)
     queryResult?: QueryResult;
 }
 
-// @public (undocumented)
+// @public
+export type QueryInfinitePaginInfo = {
+    kind: "infinite";
+    continuationToken?: string;
+    maxCount?: number;
+};
+
+// @public
+export type QueryOffsetPagingInfo = {
+    kind: "offset";
+    limit?: number;
+    offset?: number;
+};
+
+// @public
 export interface QueryResult {
-    // (undocumented)
     documents: unknown[];
-    // (undocumented)
-    infinitePagingInfo?: {
-        continuationToken: string;
-        maxCount?: number;
-    };
-    // (undocumented)
-    offsetPagingInfo?: {
-        total: number;
-        offset: number;
-        limit: number;
-    };
+    pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
 }
 
-// @public (undocumented)
+// @public
+export type ResultInfinitePaginInfo = {
+    kind: "infinite";
+    continuationToken: string;
+    maxCount?: number;
+};
+
+// @public
+export type ResultOffsetPagingInfo = {
+    kind: "offset";
+    total: number;
+    offset: number;
+    limit: number;
+};
+
+// @public
 export interface UserQuery {
-    // (undocumented)
-    infinitePagingInfo?: {
-        continuationToken?: string;
-        maxCount?: number;
-    };
-    // (undocumented)
-    offsetPagingInfo?: {
-        limit?: number;
-        offset?: number;
-    };
-    // (undocumented)
+    pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
     query: string;
 }
 
