@@ -6,46 +6,194 @@ import { TextField } from "@fluentui/react/lib/TextField";
 import { PrimaryButton } from "@fluentui/react/lib/Button";
 import { Link } from "@fluentui/react";
 
+/**
+ * Query result offset paging information
+ * @public
+ */
+type ResultOffsetPagingInfo = {
+  kind: "offset";
+
+  /**
+   * Total number of results
+   */
+  total: number;
+
+  /**
+   * Paging offset: number of results to skip before displaying first result.
+   * Echoed from the original user query
+   */
+  offset: number;
+
+  /**
+   * Paging limit: max number of results to display in a page
+   * Echoed from the original user query
+   */
+  limit: number;
+};
+
+/**
+ * Query result infinite paging information
+ * @public
+ */
+type ResultInfinitePaginInfo = {
+  kind: "infinite";
+
+  /**
+   * Returned by the query engine and to be submitted by the subsequent query request in order to receive the next set of results
+   * Echoed from original query
+   */
+  continuationToken: string;
+
+  /**
+   * Maximum number of results requested
+   * Echoed from original query
+   */
+  maxCount?: number;
+};
+
+/**
+ * Query offset paging information
+ * @public
+ */
+type QueryOffsetPagingInfo = {
+  kind: "offset";
+
+  /**
+   * Paging limit: max number of results to display in a page
+   */
+  limit?: number;
+
+  /**
+   * Paging offset: number of results to skip before displaying first result.
+   */
+  offset?: number;
+};
+
+/**
+ * Query infinite paging information
+ * @public
+ */
+type QueryInfinitePaginInfo = {
+  kind: "infinite";
+
+  /**
+   * Returned by the query engine and to be submitted by the subsequent query request in order to receive the next set of results
+   */
+  continuationToken?: string;
+
+  /**
+   * Maximum number of results requested
+   */
+  maxCount?: number;
+};
+
+/**
+ * User query
+ * Information related to the query that the user is submitting
+ * @public
+ */
 export interface UserQuery {
+  /**
+   * The query text as entered by the user
+   */
   query: string;
-  offsetPagingInfo?: {
-    limit?: number;
-    offset?: number;
-  };
-  infinitePagingInfo?: {
-    continuationToken?: string;
-    maxCount?: number;
-  };
+
+  /**
+   * Paging information
+   */
+  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
 }
 
+/**
+ * Query result
+ * The result of the query passed to the editor in order to display it
+ * @public
+ */
 export interface QueryResult {
+  /**
+   * Results of the query (an array of documents of unknown schema)
+   */
   documents: unknown[];
 
-  offsetPagingInfo?: {
-    total: number;
-    offset: number;
-    limit: number;
-  };
-  infinitePagingInfo?: {
-    continuationToken: string;
-    maxCount?: number;
-  };
+  /**
+   * Paging information. The type depends on the original query.
+   * If the result is infinite, the query editor remembers the results and displays the results of the successive requests on top of each other
+   */
+  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
 }
 
+/**
+ * Properties of the query editor react component
+ * @public
+ */
 export interface QueryEditorProps {
+  /**
+   * If there are multiple query editors, this can be used to uniquely identify them.
+   */
   connectionId: string;
+
+  /**
+   * Database name
+   */
   databaseName: string;
-  collectionName: string;
+
+  /**
+   * container name
+   */
+  containerName: string;
+
+  /**
+   * Label displayed for the query input UI element
+   */
   queryInputLabel: string;
+
+  /**
+   * Label for the query submit button
+   */
   queryButtonLabel: string;
+
+  /**
+   * Label for "Load more results"
+   */
   loadMoreLabel?: string;
+
+  /**
+   * Default query input text if specified
+   */
   defaultQueryText?: string;
-  paginationType: "offset" | "infinite";
+
+  /**
+   * Paging type:
+   * - offset displays previous/next page buttons and information
+   * - infinite displays "Load more results"
+   */
+  pagingType: "offset" | "infinite";
+
+  /**
+   * Called when the user submits a query by pressing the submit button
+   * @param connectionId - Unique identifier specified as `QueryEditorProps.connectionId`
+   * @param query - Query text
+   * @returns
+   */
   onSubmitQuery: (connectionId: string, query: UserQuery) => void;
+
+  /**
+   * Query results to be displayed by the editor
+   */
   queryResult?: QueryResult;
+
+  /**
+   * Called when the user edits some results
+   * @param updatedData - Updated documents by the user
+   * @returns
+   */
   onResultUpdate?: (updatedData: unknown) => void;
 }
 
+/**
+ * Query editor React component
+ * @public
+ */
 export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
   const [query, setQuery] = useState<string | undefined>(
     props.defaultQueryText ?? ""
@@ -57,21 +205,26 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
     continuationToken?: string;
   }) => {
     if (query !== undefined && props.connectionId && props.onSubmitQuery) {
-      switch (props.paginationType) {
+      switch (props.pagingType) {
         case "infinite":
           props.onSubmitQuery(props.connectionId, {
             query: query,
-            infinitePagingInfo: {
+            pagingInfo: {
+              kind: "infinite",
               continuationToken: params.continuationToken,
-              maxCount: props.queryResult?.infinitePagingInfo?.maxCount,
+              maxCount: (
+                props.queryResult?.pagingInfo as ResultInfinitePaginInfo
+              )?.maxCount,
             },
           });
           break;
         case "offset":
           props.onSubmitQuery(props.connectionId, {
             query: query,
-            offsetPagingInfo: {
-              limit: props.queryResult?.offsetPagingInfo?.limit,
+            pagingInfo: {
+              kind: "offset",
+              limit: (props.queryResult?.pagingInfo as ResultOffsetPagingInfo)
+                ?.limit,
               offset: params.offset,
             },
           });
@@ -95,7 +248,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
       >
         <div>
           <h1>
-            {props.databaseName}.<small>{props.collectionName}</small>
+            {props.databaseName}.<small>{props.containerName}</small>
           </h1>
         </div>
         <Stack horizontal verticalAlign="end">
@@ -137,13 +290,15 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                 />
                 Text
               </Stack>
-              {props.paginationType === "offset" && (
+              {props.pagingType === "offset" && (
                 <OffsetPaginator
                   connectionId={props.connectionId}
                   queryText={query}
                   resultLength={queryResult.documents.length}
                   onPageRequestSubmit={handleSubmit}
-                  offsetPagingInfo={props.queryResult?.offsetPagingInfo}
+                  pagingInfo={
+                    props.queryResult?.pagingInfo as ResultOffsetPagingInfo
+                  }
                 />
               )}
             </Stack>
@@ -165,14 +320,15 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}
-            {props.paginationType === "infinite" && (
+            {props.pagingType === "infinite" && (
               <Link
                 href=""
                 underline
                 onClick={() =>
                   handleSubmit({
-                    continuationToken:
-                      queryResult.infinitePagingInfo?.continuationToken,
+                    continuationToken: (
+                      queryResult.pagingInfo as ResultInfinitePaginInfo
+                    )?.continuationToken,
                   })
                 }
               >
@@ -198,17 +354,13 @@ const OffsetPaginator = (props: {
     offset?: number;
     continuationToken?: string;
   }) => void;
-  offsetPagingInfo?: {
-    total: number;
-    offset: number;
-    limit: number;
-  };
+  pagingInfo?: ResultOffsetPagingInfo;
 }): JSX.Element => {
-  if (!props.offsetPagingInfo || props.resultLength === undefined) {
+  if (!props.pagingInfo || props.resultLength === undefined) {
     return <></>;
   }
 
-  const { limit, offset, total } = props.offsetPagingInfo;
+  const { limit, offset, total } = props.pagingInfo;
 
   return (
     <Stack horizontal tokens={{ childrenGap: 10 }}>

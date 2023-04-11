@@ -1,6 +1,6 @@
 {
   "name": "@azure/cosmos-query-editor-react",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Query editor for Azure Cosmos DB frontends",
   "source": "src/index.ts",
   "main": "dist/index.js",

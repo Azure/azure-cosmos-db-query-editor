@@ -33,14 +33,15 @@ export const acquireVsCodeApi = () => ({
       break;
     case "submitQuery":
       const query = msg.query;
-      if (query.offsetPagingInfo) {
-        const offset = query.offsetPagingInfo.offset ?? 0;
-        const limit = query.offsetPagingInfo.limit ?? 10;
+      if (query.pagingInfo.kind === "offset") {
+        const offset = query.pagingInfo.offset ?? 0;
+        const limit = query.pagingInfo.limit ?? 10;
         const response: QueryEditorMessage = {
           type: "queryResult",
           data: {
             documents: results.slice(offset, offset + limit),
-            offsetPagingInfo: {
+            pagingInfo: {
+              kind: "offset",
               offset,
               limit,
               total: results.length,
@@ -48,15 +49,16 @@ export const acquireVsCodeApi = () => ({
           },
         };
         window.postMessage(response);
-      } else if (query.infinitePagingInfo) {
-        const continuationToken = query.infinitePagingInfo.continuationToken;
+      } else if (query.pagingInfo.kind === "infinite") {
+        const continuationToken = query.pagingInfo.continuationToken;
         const offset = continuationToken ? Number.parseInt(continuationToken) : 0;
-        const maxCount = query.infinitePagingInfo.maxCount ?? 10;
+        const maxCount = query.pagingInfo.maxCount ?? 10;
         const response: QueryEditorMessage = {
           type: "queryResult",
           data: {
             documents: results.slice(offset, offset + maxCount),
-            infinitePagingInfo: {
+            pagingInfo: {
+              kind: "infinite",
               continuationToken: (offset + maxCount).toString(),
               maxCount
             },

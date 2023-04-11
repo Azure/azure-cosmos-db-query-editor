@@ -6,11 +6,11 @@ test("renders query editor", () => {
   render(
     <QueryEditor
       databaseName="databaseName"
-      collectionName="collectionName"
+      containerName="collectionName"
       connectionId="connectionId"
       queryButtonLabel="Submit"
       queryInputLabel="Enter query"
-      paginationType="infinite"
+      pagingType="infinite"
       onSubmitQuery={() => {
         // Noop
       }}

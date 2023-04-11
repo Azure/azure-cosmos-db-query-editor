@@ -6,11 +6,11 @@ This project contains a reusable query editor React component.
 const queryEditorPropsInfinite: QueryEditorProps = {
   connectionId: "connectionId",
   databaseName: "myDatabase",
-  collectionName: "myCollection",
+  containerName: "myContainer",
   defaultQueryText: "select * from c",
   queryInputLabel: "Enter query",
   queryButtonLabel: "Submit",
-  paginationType: "infinite",
+  pagingType: "infinite",
   onSubmitQuery: (connectionId: string, query: UserQuery) => {
     console.log(`A query has been submitted from the editor: ${query}`);
   }
@@ -24,7 +24,7 @@ const queryEditorPropsInfinite: QueryEditorProps = {
 |-|-|
 |`connectionId`| Provides context when running multiple query editors. A query editor is associated with a connection which is echoed in `onSubmitQuery`.|
 |`databaseName`| The Database name|
-|`collectionName`| The collection name|
+|`containerName`| The container name|
 |`defaultQueryText`| (Optional) The default query that appears in the input box|
 |`loadMoreLabel`| (Optional) Label on the button to load more results|
 |`queryInputLabel`| The label for the query input box|
@@ -45,6 +45,20 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+### Using the `testapp/` to debug
+The easiest wayt to debug changes in the library is to use the webapp in the `testapp/` folder.
+
+In the `testapp/package.json` file in the `dependencies` section, the following options can help you test:
+* The current source code of the library:
+  * Make sure you run `npm i` on every change
+  *  `"@azure/cosmos-query-editor-react": ".."`
+* The package that gets published
+  * From the root folder, run `npm run publish`
+  * `"@azure/cosmos-query-editor-react": "../azure-cosmos-query-editor-react-1.0.0-beta.2.tgz"`
+* The final published package from npmjs:
+  * `"@azure/cosmos-query-editor-react": "1.0.0-beta.2"`
+
 
 ## Trademarks
 
