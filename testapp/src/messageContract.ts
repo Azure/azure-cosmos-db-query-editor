@@ -38,26 +38,28 @@ export interface EditorQueryResult {
  */
 export type QueryEditorCommand =
   | {
-      action: "ready";
-    }
+    action: "ready";
+  }
   | {
-      action: "submitQuery";
-      query: EditorUserQuery;
-    };
+    action: "submitQuery";
+    query: EditorUserQuery;
+  };
 
 /**
  * Webview --> query-editor
  */
 export type QueryEditorMessage =
   | {
-      type: "initialize";
-      data: {
-        connectionId: string;
-        databaseName: string;
-        collectionName: string;
-      };
-    }
-  | {
-      type: "queryResult";
-      data: EditorQueryResult;
+    type: "initialize";
+    data: {
+      connectionId: string;
+      databaseName: string;
+      containerName: string;
+      pagingType: "offset" | "infinite";
+      defaultQueryText?: string;
     };
+  }
+  | {
+    type: "queryResult";
+    data: EditorQueryResult;
+  };

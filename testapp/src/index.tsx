@@ -66,11 +66,11 @@ window.addEventListener('message', event => {
     case "initialize":
       queryEditorPropsOffset.connectionId = JSON.stringify(message.data);
       queryEditorPropsOffset.databaseName = message.data.databaseName;
-      queryEditorPropsOffset.containerName = message.data.collectionName;
+      queryEditorPropsOffset.containerName = message.data.containerName;
 
       queryEditorPropsInfinite.connectionId = JSON.stringify(message.data);
       queryEditorPropsInfinite.databaseName = message.data.databaseName;
-      queryEditorPropsInfinite.containerName = message.data.collectionName;
+      queryEditorPropsInfinite.containerName = message.data.containerName;
       break;
     case "queryResult":
       queryEditorPropsOffset.queryResult = message.data;
