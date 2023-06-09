@@ -194,9 +194,9 @@ export interface QueryEditorProps {
   queryResult?: QueryResult;
 
   /**
-   * Query progress information
+   * Query processing progress
    */
-  queryProgress?: {
+  progress?: {
     showSpinner?: boolean;
     showMeter?: {
       value: number;
@@ -205,6 +205,23 @@ export interface QueryEditorProps {
     };
     showMessage?: string;
   };
+
+  /**
+   * Error message to be displayed
+   */
+  error?: {
+    message: string;
+  };
+
+  /**
+   * If true, the query input is disabled. For example when query is being executed
+   */
+  isInputDisabled?: boolean;
+
+  /**
+   * If true, the query submit button is disabled. For example when query is being executed
+   */
+  isSubmitDisabled?: boolean;
 
   /**
    * Called when the user edits some results
@@ -281,12 +298,16 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
             label={props.queryInputLabel}
             value={query}
             onChange={(evt, newText: string | undefined) => setQuery(newText)}
+            disabled={props.isInputDisabled}
           />
-          <PrimaryButton onClick={() => handleSubmit({ offset: 0 })}>
+          <PrimaryButton
+            onClick={() => handleSubmit({ offset: 0 })}
+            disabled={props.isSubmitDisabled}
+          >
             {props.queryButtonLabel}
           </PrimaryButton>
         </Stack>
-        {props.queryProgress?.showSpinner && <ProgressIndicator />}
+        {props.progress?.showSpinner && <ProgressIndicator />}
         {queryResult && (
           <>
             <Stack

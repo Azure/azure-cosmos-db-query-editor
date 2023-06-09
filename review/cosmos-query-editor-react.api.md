@@ -13,13 +13,16 @@ export interface QueryEditorProps {
     containerName: string;
     databaseName: string;
     defaultQueryText?: string;
+    error?: {
+        message: string;
+    };
+    isInputDisabled?: boolean;
+    isSubmitDisabled?: boolean;
     loadMoreLabel?: string;
     onResultUpdate?: (updatedData: unknown) => void;
     onSubmitQuery: (connectionId: string, query: UserQuery) => void;
     pagingType: "offset" | "infinite";
-    queryButtonLabel: string;
-    queryInputLabel: string;
-    queryProgress?: {
+    progress?: {
         showSpinner?: boolean;
         showMeter?: {
             value: number;
@@ -28,6 +31,8 @@ export interface QueryEditorProps {
         };
         showMessage?: string;
     };
+    queryButtonLabel: string;
+    queryInputLabel: string;
     queryResult?: QueryResult;
 }
 

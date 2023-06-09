@@ -67,10 +67,11 @@ const queryEditorPropsProgress: QueryEditorProps = {
   queryButtonLabel: "Submit",
   pagingType: "offset",
   onSubmitQuery: () => {},
-  queryProgress: {
-    // showMessage: "test",
+  progress: {
     showSpinner: true,
-  }
+  },
+  isInputDisabled: true,
+  isSubmitDisabled: true
 };
 
 
