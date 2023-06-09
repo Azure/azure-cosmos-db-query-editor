@@ -43,7 +43,7 @@ type ResultInfinitePaginInfo = {
    * Returned by the query engine and to be submitted by the subsequent query request in order to receive the next set of results
    * Echoed from original query
    */
-  continuationToken: string;
+  continuationToken?: string;
 
   /**
    * Maximum number of results requested
