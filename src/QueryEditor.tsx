@@ -5,6 +5,7 @@ import { Stack } from "@fluentui/react/lib/Stack";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { PrimaryButton } from "@fluentui/react/lib/Button";
 import { Link } from "@fluentui/react";
+import { ProgressIndicator } from "@fluentui/react/lib/ProgressIndicator";
 
 /**
  * Query result offset paging information
@@ -49,6 +50,11 @@ type ResultInfinitePaginInfo = {
    * Echoed from original query
    */
   maxCount?: number;
+
+  /**
+   * Request charge
+   */
+  requestCharge?: number;
 };
 
 /**
@@ -67,6 +73,11 @@ type QueryOffsetPagingInfo = {
    * Paging offset: number of results to skip before displaying first result.
    */
   offset?: number;
+
+  /**
+   * Request charge
+   */
+  requestCharge?: number;
 };
 
 /**
@@ -183,6 +194,19 @@ export interface QueryEditorProps {
   queryResult?: QueryResult;
 
   /**
+   * Query progress information
+   */
+  queryProgress?: {
+    showSpinner?: boolean;
+    showMeter?: {
+      value: number;
+      maxValue: number;
+      unit?: string;
+    };
+    showMessage?: string;
+  };
+
+  /**
    * Called when the user edits some results
    * @param updatedData - Updated documents by the user
    * @returns
@@ -262,7 +286,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
             {props.queryButtonLabel}
           </PrimaryButton>
         </Stack>
-
+        {props.queryProgress?.showSpinner && <ProgressIndicator />}
         {queryResult && (
           <>
             <Stack

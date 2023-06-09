@@ -4,6 +4,7 @@ import './index.css';
 import { QueryEditor, QueryEditorProps, QueryInfinitePaginInfo, UserQuery } from '@azure/cosmos-query-editor-react';
 import { QueryEditorCommand, QueryEditorMessage } from './messageContract';
 import { acquireVsCodeApi } from './vscodeMock';
+import { DefaultButton } from '@fluentui/react';
 
 const vscode = acquireVsCodeApi();
 
@@ -57,10 +58,49 @@ const queryEditorPropsInfinite: QueryEditorProps = {
   }
 };
 
+const queryEditorPropsProgress: QueryEditorProps = {
+  connectionId: "connectionId",
+  databaseName: "databaseName",
+  containerName: "containerName",
+  defaultQueryText: "{}",
+  queryInputLabel: "Enter query",
+  queryButtonLabel: "Submit",
+  pagingType: "offset",
+  onSubmitQuery: () => {},
+  queryProgress: {
+    // showMessage: "test",
+    showSpinner: true,
+  }
+};
+
 
 window.addEventListener('message', event => {
   const message: QueryEditorMessage = event.data; // The JSON data our extension sent
   // console.log('Webview received', message);
+
+  const onClear = () => {
+    queryEditorPropsOffset.queryResult = undefined;
+    queryEditorPropsInfinite.queryResult = undefined;
+    render();
+  };
+
+  const render = () => {
+    root.render(
+      <React.StrictMode>
+        <DefaultButton text="Clear" onClick={onClear} />
+
+        <h1>Offset pagination</h1>
+        <QueryEditor {...queryEditorPropsOffset} />
+
+        <h1>Infinite scrolling pagination</h1>
+        <QueryEditor {...queryEditorPropsInfinite} />
+
+        <h1>Progress indicator</h1>
+        <QueryEditor {...queryEditorPropsProgress} />
+
+      </React.StrictMode>
+    );
+  };
 
   switch (message.type) {
     case "initialize":
@@ -73,12 +113,19 @@ window.addEventListener('message', event => {
       queryEditorPropsInfinite.containerName = message.data.containerName;
       break;
     case "queryResult":
-      queryEditorPropsOffset.queryResult = message.data;
-      if (queryEditorPropsInfinite.queryResult === undefined) {
-        queryEditorPropsInfinite.queryResult = message.data;
-      } else {
-        const documents = queryEditorPropsInfinite.queryResult.documents.concat(message.data.documents);
-        queryEditorPropsInfinite.queryResult = { ...message.data, documents };
+      if (message.data.pagingInfo?.kind === "offset") {
+        queryEditorPropsOffset.queryResult = message.data;
+        queryEditorPropsInfinite.queryResult = undefined;
+
+      } else if (message.data.pagingInfo?.kind === "infinite") {
+        if (queryEditorPropsInfinite.queryResult === undefined) {
+          queryEditorPropsInfinite.queryResult = message.data;
+        } else {
+          const documents = queryEditorPropsInfinite.queryResult.documents.concat(message.data.documents);
+          queryEditorPropsInfinite.queryResult = { ...message.data, documents };
+        }
+
+        queryEditorPropsOffset.queryResult = undefined;
       }
       break;
     default:
@@ -86,15 +133,7 @@ window.addEventListener('message', event => {
       return;
   }
 
-  root.render(
-    <React.StrictMode>
-      <h1>Offset pagination</h1>
-      <QueryEditor {...queryEditorPropsOffset} />
-
-      <h1>Infinite scrolling pagination</h1>
-      <QueryEditor {...queryEditorPropsInfinite} />
-    </React.StrictMode>
-  );
+  render();
 });
 
 root.render(

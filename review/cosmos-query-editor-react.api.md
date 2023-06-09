@@ -19,6 +19,15 @@ export interface QueryEditorProps {
     pagingType: "offset" | "infinite";
     queryButtonLabel: string;
     queryInputLabel: string;
+    queryProgress?: {
+        showSpinner?: boolean;
+        showMeter?: {
+            value: number;
+            maxValue: number;
+            unit?: string;
+        };
+        showMessage?: string;
+    };
     queryResult?: QueryResult;
 }
 
@@ -34,6 +43,7 @@ export type QueryOffsetPagingInfo = {
     kind: "offset";
     limit?: number;
     offset?: number;
+    requestCharge?: number;
 };
 
 // @public
@@ -47,6 +57,7 @@ export type ResultInfinitePaginInfo = {
     kind: "infinite";
     continuationToken: string;
     maxCount?: number;
+    requestCharge?: number;
 };
 
 // @public
