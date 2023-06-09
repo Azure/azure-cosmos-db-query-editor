@@ -60,7 +60,7 @@ export interface QueryResult {
 // @public
 export type ResultInfinitePaginInfo = {
     kind: "infinite";
-    continuationToken: string;
+    continuationToken?: string;
     maxCount?: number;
     requestCharge?: number;
 };
