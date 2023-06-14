@@ -365,21 +365,23 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}
-            {props.pagingType === "infinite" && (
-              <Link
-                href=""
-                underline
-                onClick={() =>
-                  handleSubmit({
-                    continuationToken: (
-                      queryResult.pagingInfo as ResultInfinitePaginInfo
-                    )?.continuationToken,
-                  })
-                }
-              >
-                {props.loadMoreLabel || "Load more items"}
-              </Link>
-            )}
+            {props.pagingType === "infinite" &&
+              (queryResult.pagingInfo as ResultInfinitePaginInfo)
+                ?.continuationToken && (
+                <Link
+                  href=""
+                  underline
+                  onClick={() =>
+                    handleSubmit({
+                      continuationToken: (
+                        queryResult.pagingInfo as ResultInfinitePaginInfo
+                      )?.continuationToken,
+                    })
+                  }
+                >
+                  {props.loadMoreLabel || "Load more items"}
+                </Link>
+              )}
           </>
         )}
         {/* {props.queryResult && props.queryResult.map((r: any) => (
