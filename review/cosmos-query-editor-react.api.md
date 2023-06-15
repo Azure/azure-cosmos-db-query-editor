@@ -23,13 +23,13 @@ export interface QueryEditorProps {
     onSubmitQuery: (connectionId: string, query: UserQuery) => void;
     pagingType: "offset" | "infinite";
     progress?: {
-        showSpinner?: boolean;
-        showMeter?: {
+        spinner?: boolean;
+        meter?: {
             value: number;
             maxValue: number;
             unit?: string;
         };
-        showMessage?: string;
+        message?: string;
     };
     queryButtonLabel: string;
     queryInputLabel: string;
@@ -37,7 +37,7 @@ export interface QueryEditorProps {
 }
 
 // @public
-export type QueryInfinitePaginInfo = {
+export type QueryInfinitePagingInfo = {
     kind: "infinite";
     continuationToken?: string;
     maxCount?: number;
@@ -54,11 +54,11 @@ export type QueryOffsetPagingInfo = {
 // @public
 export interface QueryResult {
     documents: unknown[];
-    pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
+    pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePagingInfo;
 }
 
 // @public
-export type ResultInfinitePaginInfo = {
+export type ResultInfinitePagingInfo = {
     kind: "infinite";
     continuationToken?: string;
     maxCount?: number;
@@ -75,7 +75,7 @@ export type ResultOffsetPagingInfo = {
 
 // @public
 export interface UserQuery {
-    pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
+    pagingInfo: QueryOffsetPagingInfo | QueryInfinitePagingInfo;
     query: string;
 }
 

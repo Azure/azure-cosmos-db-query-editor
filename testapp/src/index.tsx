@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { QueryEditor, QueryEditorProps, QueryInfinitePaginInfo, UserQuery } from '@azure/cosmos-query-editor-react';
+import { QueryEditor, QueryEditorProps, QueryInfinitePagingInfo, UserQuery } from '@azure/cosmos-query-editor-react';
 import { QueryEditorCommand, QueryEditorMessage } from './messageContract';
 import { acquireVsCodeApi } from './vscodeMock';
 import { DefaultButton } from '@fluentui/react';
@@ -51,7 +51,7 @@ const queryEditorPropsInfinite: QueryEditorProps = {
   queryButtonLabel: "Submit",
   pagingType: "infinite",
   onSubmitQuery: (connectionId: string, query: UserQuery) => {
-    if (queryEditorPropsInfinite.queryResult && (query.pagingInfo as QueryInfinitePaginInfo)?.continuationToken === undefined) {
+    if (queryEditorPropsInfinite.queryResult && (query.pagingInfo as QueryInfinitePagingInfo)?.continuationToken === undefined) {
       queryEditorPropsInfinite.queryResult = undefined;
     }
     return onSubmitQuery(connectionId, query);
@@ -68,7 +68,7 @@ const queryEditorPropsProgress: QueryEditorProps = {
   pagingType: "offset",
   onSubmitQuery: () => {},
   progress: {
-    showSpinner: true,
+    spinner: true,
   },
   isInputDisabled: true,
   isSubmitDisabled: true

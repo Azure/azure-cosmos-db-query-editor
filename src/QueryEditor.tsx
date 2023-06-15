@@ -36,7 +36,7 @@ type ResultOffsetPagingInfo = {
  * Query result infinite paging information
  * @public
  */
-type ResultInfinitePaginInfo = {
+type ResultInfinitePagingInfo = {
   kind: "infinite";
 
   /**
@@ -84,7 +84,7 @@ type QueryOffsetPagingInfo = {
  * Query infinite paging information
  * @public
  */
-type QueryInfinitePaginInfo = {
+type QueryInfinitePagingInfo = {
   kind: "infinite";
 
   /**
@@ -112,7 +112,7 @@ export interface UserQuery {
   /**
    * Paging information
    */
-  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
+  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePagingInfo;
 }
 
 /**
@@ -130,7 +130,7 @@ export interface QueryResult {
    * Paging information. The type depends on the original query.
    * If the result is infinite, the query editor remembers the results and displays the results of the successive requests on top of each other
    */
-  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
+  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePagingInfo;
 }
 
 /**
@@ -197,13 +197,13 @@ export interface QueryEditorProps {
    * Query processing progress
    */
   progress?: {
-    showSpinner?: boolean;
-    showMeter?: {
+    spinner?: boolean;
+    meter?: {
       value: number;
       maxValue: number;
       unit?: string;
     };
-    showMessage?: string;
+    message?: string;
   };
 
   /**
@@ -254,7 +254,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               kind: "infinite",
               continuationToken: params.continuationToken,
               maxCount: (
-                props.queryResult?.pagingInfo as ResultInfinitePaginInfo
+                props.queryResult?.pagingInfo as ResultInfinitePagingInfo
               )?.maxCount,
             },
           });
@@ -307,7 +307,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
             {props.queryButtonLabel}
           </PrimaryButton>
         </Stack>
-        {props.progress?.showSpinner && <ProgressIndicator />}
+        {props.progress?.spinner && <ProgressIndicator />}
         {queryResult && (
           <>
             <Stack
@@ -366,7 +366,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               </div>
             )}
             {props.pagingType === "infinite" &&
-              (queryResult.pagingInfo as ResultInfinitePaginInfo)
+              (queryResult.pagingInfo as ResultInfinitePagingInfo)
                 ?.continuationToken && (
                 <Link
                   href=""
@@ -374,7 +374,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                   onClick={() =>
                     handleSubmit({
                       continuationToken: (
-                        queryResult.pagingInfo as ResultInfinitePaginInfo
+                        queryResult.pagingInfo as ResultInfinitePagingInfo
                       )?.continuationToken,
                     })
                   }
