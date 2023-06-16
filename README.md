@@ -32,6 +32,8 @@ const queryEditorPropsInfinite: QueryEditorProps = {
 |`paginationType`| `"offset"`: previous/next page buttons are displayed for paging through results. `"infinite"`: a "Load more results" button appears to load more results |
 |`onSubmitQuery`| Called when the Submit button is pressed|
 |`queryResult`| (Optional) The query result that the editor must display. It must be an array of json objects.|
+|`progress`| (Optional) Indicate progress in the query editor
+|`error`| (Optional) Display error
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
@@ -47,18 +49,18 @@ For more information see the [Code of Conduct FAQ](https://opensource.microsoft.
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ### Using the `testapp/` to debug
-The easiest wayt to debug changes in the library is to use the webapp in the `testapp/` folder.
+The easiest way to debug changes in the library is to use the webapp in the `testapp/` folder.
 
 In the `testapp/package.json` file in the `dependencies` section, the following options can help you test:
-* The current source code of the library:
+1. Use the current source code of the library:
+  * In `testapp/package.json`, use: `"@azure/cosmos-query-editor-react": ".."`
   * Make sure you run `npm i` on every change
-  *  `"@azure/cosmos-query-editor-react": ".."`
-* The package that gets published
-  * From the root folder, run `npm run publish`
-  * `"@azure/cosmos-query-editor-react": "../azure-cosmos-query-editor-react-1.0.0-beta.2.tgz"`
-* The final published package from npmjs:
-  * `"@azure/cosmos-query-editor-react": "1.0.0-beta.2"`
-
+2. Use the package that gets published
+  * In `testapp/package.json`, use: `"@azure/cosmos-query-editor-react": "../azure-cosmos-query-editor-react-1.0.0-beta.2.tgz"`
+  * From the root folder, run `npm run publish`. This will create a `.tgz` file.
+  * To rebuild `testapp/` and incorporate the new changes in the `.tgz` file, you need to update the package and clear the webpack cache, so rebuild with: `rm -rf node_modules/.cache/default-development && npm update @azure/cosmos-query-editor-react && npm start`
+3. Use the final published package from npmjs:
+  * In `testapp/package.json`, use: `"@azure/cosmos-query-editor-react": "1.0.0-beta.2"`
 
 ## Trademarks
 

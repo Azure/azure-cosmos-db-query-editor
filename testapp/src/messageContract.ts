@@ -1,23 +1,23 @@
-type ResultOffsetPagingInfo = {
+export type ResultOffsetPagingInfo = {
   kind: "offset";
   total: number;
   offset: number;
   limit: number;
 };
 
-type ResultInfinitePaginInfo = {
+export type ResultInfinitePagingInfo = {
   kind: "infinite";
-  continuationToken: string;
+  continuationToken?: string;
   maxCount?: number;
 };
 
-type QueryOffsetPagingInfo = {
+export type QueryOffsetPagingInfo = {
   kind: "offset";
   limit?: number;
   offset?: number;
 };
 
-type QueryInfinitePaginInfo = {
+export type QueryInfinitePagingInfo = {
   kind: "infinite";
   continuationToken?: string;
   maxCount?: number;
@@ -25,12 +25,13 @@ type QueryInfinitePaginInfo = {
 
 export interface EditorUserQuery {
   query: string;
-  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
+  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePagingInfo;
 }
 
 export interface EditorQueryResult {
   documents: unknown[];
-  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
+  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePagingInfo;
+  requestCharge?: number;
 }
 
 /**
@@ -38,28 +39,28 @@ export interface EditorQueryResult {
  */
 export type QueryEditorCommand =
   | {
-    action: "ready";
-  }
+      action: "ready";
+    }
   | {
-    action: "submitQuery";
-    query: EditorUserQuery;
-  };
+      action: "submitQuery";
+      query: EditorUserQuery;
+    };
 
 /**
  * Webview --> query-editor
  */
 export type QueryEditorMessage =
   | {
-    type: "initialize";
-    data: {
-      connectionId: string;
-      databaseName: string;
-      containerName: string;
-      pagingType: "offset" | "infinite";
-      defaultQueryText?: string;
-    };
-  }
+      type: "initialize";
+      data: {
+        connectionId: string;
+        databaseName: string;
+        containerName: string;
+        pagingType: "offset" | "infinite";
+        defaultQueryText?: string;
+      };
+    }
   | {
-    type: "queryResult";
-    data: EditorQueryResult;
-  };
+      type: "queryResult";
+      data: EditorQueryResult;
+    };

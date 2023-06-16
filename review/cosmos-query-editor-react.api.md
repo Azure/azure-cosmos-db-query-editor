@@ -13,17 +13,31 @@ export interface QueryEditorProps {
     containerName: string;
     databaseName: string;
     defaultQueryText?: string;
+    error?: {
+        message: string;
+    };
+    isInputDisabled?: boolean;
+    isSubmitDisabled?: boolean;
     loadMoreLabel?: string;
     onResultUpdate?: (updatedData: unknown) => void;
     onSubmitQuery: (connectionId: string, query: UserQuery) => void;
     pagingType: "offset" | "infinite";
+    progress?: {
+        spinner?: boolean;
+        meter?: {
+            value: number;
+            maxValue: number;
+            unit?: string;
+        };
+        message?: string;
+    };
     queryButtonLabel: string;
     queryInputLabel: string;
     queryResult?: QueryResult;
 }
 
 // @public
-export type QueryInfinitePaginInfo = {
+export type QueryInfinitePagingInfo = {
     kind: "infinite";
     continuationToken?: string;
     maxCount?: number;
@@ -34,19 +48,21 @@ export type QueryOffsetPagingInfo = {
     kind: "offset";
     limit?: number;
     offset?: number;
+    requestCharge?: number;
 };
 
 // @public
 export interface QueryResult {
     documents: unknown[];
-    pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
+    pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePagingInfo;
 }
 
 // @public
-export type ResultInfinitePaginInfo = {
+export type ResultInfinitePagingInfo = {
     kind: "infinite";
-    continuationToken: string;
+    continuationToken?: string;
     maxCount?: number;
+    requestCharge?: number;
 };
 
 // @public
@@ -59,7 +75,7 @@ export type ResultOffsetPagingInfo = {
 
 // @public
 export interface UserQuery {
-    pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
+    pagingInfo: QueryOffsetPagingInfo | QueryInfinitePagingInfo;
     query: string;
 }
 

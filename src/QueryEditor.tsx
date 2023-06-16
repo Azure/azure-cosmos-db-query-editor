@@ -5,6 +5,7 @@ import { Stack } from "@fluentui/react/lib/Stack";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { PrimaryButton } from "@fluentui/react/lib/Button";
 import { Link } from "@fluentui/react";
+import { ProgressIndicator } from "@fluentui/react/lib/ProgressIndicator";
 
 /**
  * Query result offset paging information
@@ -35,20 +36,25 @@ type ResultOffsetPagingInfo = {
  * Query result infinite paging information
  * @public
  */
-type ResultInfinitePaginInfo = {
+type ResultInfinitePagingInfo = {
   kind: "infinite";
 
   /**
    * Returned by the query engine and to be submitted by the subsequent query request in order to receive the next set of results
    * Echoed from original query
    */
-  continuationToken: string;
+  continuationToken?: string;
 
   /**
    * Maximum number of results requested
    * Echoed from original query
    */
   maxCount?: number;
+
+  /**
+   * Request charge
+   */
+  requestCharge?: number;
 };
 
 /**
@@ -67,13 +73,18 @@ type QueryOffsetPagingInfo = {
    * Paging offset: number of results to skip before displaying first result.
    */
   offset?: number;
+
+  /**
+   * Request charge
+   */
+  requestCharge?: number;
 };
 
 /**
  * Query infinite paging information
  * @public
  */
-type QueryInfinitePaginInfo = {
+type QueryInfinitePagingInfo = {
   kind: "infinite";
 
   /**
@@ -101,7 +112,7 @@ export interface UserQuery {
   /**
    * Paging information
    */
-  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePaginInfo;
+  pagingInfo: QueryOffsetPagingInfo | QueryInfinitePagingInfo;
 }
 
 /**
@@ -119,7 +130,7 @@ export interface QueryResult {
    * Paging information. The type depends on the original query.
    * If the result is infinite, the query editor remembers the results and displays the results of the successive requests on top of each other
    */
-  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePaginInfo;
+  pagingInfo?: ResultOffsetPagingInfo | ResultInfinitePagingInfo;
 }
 
 /**
@@ -183,6 +194,36 @@ export interface QueryEditorProps {
   queryResult?: QueryResult;
 
   /**
+   * Query processing progress
+   */
+  progress?: {
+    spinner?: boolean;
+    meter?: {
+      value: number;
+      maxValue: number;
+      unit?: string;
+    };
+    message?: string;
+  };
+
+  /**
+   * Error message to be displayed
+   */
+  error?: {
+    message: string;
+  };
+
+  /**
+   * If true, the query input is disabled. For example when query is being executed
+   */
+  isInputDisabled?: boolean;
+
+  /**
+   * If true, the query submit button is disabled. For example when query is being executed
+   */
+  isSubmitDisabled?: boolean;
+
+  /**
    * Called when the user edits some results
    * @param updatedData - Updated documents by the user
    * @returns
@@ -213,7 +254,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               kind: "infinite",
               continuationToken: params.continuationToken,
               maxCount: (
-                props.queryResult?.pagingInfo as ResultInfinitePaginInfo
+                props.queryResult?.pagingInfo as ResultInfinitePagingInfo
               )?.maxCount,
             },
           });
@@ -257,12 +298,16 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
             label={props.queryInputLabel}
             value={query}
             onChange={(evt, newText: string | undefined) => setQuery(newText)}
+            disabled={props.isInputDisabled}
           />
-          <PrimaryButton onClick={() => handleSubmit({ offset: 0 })}>
+          <PrimaryButton
+            onClick={() => handleSubmit({ offset: 0 })}
+            disabled={props.isSubmitDisabled}
+          >
             {props.queryButtonLabel}
           </PrimaryButton>
         </Stack>
-
+        {props.progress?.spinner && <ProgressIndicator />}
         {queryResult && (
           <>
             <Stack
@@ -320,21 +365,23 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}
-            {props.pagingType === "infinite" && (
-              <Link
-                href=""
-                underline
-                onClick={() =>
-                  handleSubmit({
-                    continuationToken: (
-                      queryResult.pagingInfo as ResultInfinitePaginInfo
-                    )?.continuationToken,
-                  })
-                }
-              >
-                {props.loadMoreLabel || "Load more items"}
-              </Link>
-            )}
+            {props.pagingType === "infinite" &&
+              (queryResult.pagingInfo as ResultInfinitePagingInfo)
+                ?.continuationToken && (
+                <Link
+                  href=""
+                  underline
+                  onClick={() =>
+                    handleSubmit({
+                      continuationToken: (
+                        queryResult.pagingInfo as ResultInfinitePagingInfo
+                      )?.continuationToken,
+                    })
+                  }
+                >
+                  {props.loadMoreLabel || "Load more items"}
+                </Link>
+              )}
           </>
         )}
         {/* {props.queryResult && props.queryResult.map((r: any) => (
