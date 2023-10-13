@@ -3,32 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@azure/cosmos-query-editor-react": "../azure-cosmos-query-editor-react-1.0.0-beta.3.tgz",
-    "@babel/runtime": "7.23.2",
+    "@azure/cosmos-query-editor-react": "..",
     "@types/react": "18.2.28",
     "@types/react-dom": "18.2.13",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
     "typescript": "5.2.2"
   },
   "devDependencies": {
     "parcel": "2.10.0",
     "parcel-bundler": "1.12.5"
   },
+  "alias": {
+    "react": "../node_modules/react",
+    "react-dom": "../node_modules/react-dom"
+  },
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
