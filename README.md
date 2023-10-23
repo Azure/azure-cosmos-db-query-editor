@@ -62,12 +62,22 @@ In the `testapp/package.json` file in the `dependencies` section, the following 
 3. Use the final published package from npmjs:
   * In `testapp/package.json`, use: `"@azure/cosmos-query-editor-react": "1.0.0-beta.2"`
 
+Or you can use the component directly:
+In `testapp/src/index.tsx`, replace:
+
+`import { QueryEditor, QueryEditorProps, QueryInfinitePagingInfo, UserQuery } from '@azure/cosmos-query-editor-react';`
+
+by
+
+`import { QueryEditor, QueryEditorProps, QueryInfinitePagingInfo, UserQuery } from '../../src/QueryEditor';`
+
 To debug:
 1. Build the library:
   * `cd <path to cosmos-query-editor-react>`
   * `npm run build` (this will create a `dist/` folder)
 2. Run the `testapp`:
   * `cd <path to cosmos-query-editor-react>/testapp`
+  * `npm i`
   * `npm start` (the browser automatically opens to the `localhost` url)
 
 ## Trademarks
