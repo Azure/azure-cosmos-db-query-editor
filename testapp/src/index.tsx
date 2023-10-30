@@ -1,14 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { QueryEditor, QueryEditorProps, QueryInfinitePagingInfo, UserQuery } from '@azure/cosmos-query-editor-react';
+import { QueryEditor, QueryEditorProps, QueryInfinitePagingInfo, UserQuery } from '../../src/QueryEditor';
 import { QueryEditorCommand, QueryEditorMessage } from './messageContract';
 import { acquireVsCodeApi } from './vscodeMock';
-import { DefaultButton } from '@fluentui/react';
+import {
+  Button,
+  makeStyles,
+  Tab,
+  TabList,
+} from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  root: {
+    alignItems: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    // ...shorthands.padding("50px", "20px"),
+    rowGap: "20px",
+  },
+});
 
 const vscode = acquireVsCodeApi();
-
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 const onSubmitQuery = (connectionId: string, query: UserQuery): void => {
   console.log("onSubmitQuery", query);
@@ -26,119 +41,156 @@ const onReady = (): void => {
   });
 };
 
-const Bootstrapper = (props: { onReady: () => void }) => {
-  useEffect(() => props.onReady && props.onReady());
-  return <>Not initialized yet</>;
+type TabValue = "offset" | "infinite" | "progress";
+
+const titleStrings = {
+  offset: "Offset pagination",
+  infinite: "Infinite pagination",
+  progress: "Progress indicator"
 }
 
-const queryEditorPropsOffset: QueryEditorProps = {
-  connectionId: "",
-  databaseName: "",
-  containerName: "",
-  defaultQueryText: "{}",
-  queryInputLabel: "Enter query",
-  queryButtonLabel: "Submit",
-  pagingType: "offset",
-  onSubmitQuery
-};
-
-const queryEditorPropsInfinite: QueryEditorProps = {
-  connectionId: "",
-  databaseName: "",
-  containerName: "",
-  defaultQueryText: "{}",
-  queryInputLabel: "Enter query",
-  queryButtonLabel: "Submit",
-  pagingType: "infinite",
-  onSubmitQuery: (connectionId: string, query: UserQuery) => {
-    if (queryEditorPropsInfinite.queryResult && (query.pagingInfo as QueryInfinitePagingInfo)?.continuationToken === undefined) {
-      queryEditorPropsInfinite.queryResult = undefined;
+const Bootstrapper: React.FC<{ onReady: () => void }> = (props: { onReady: () => void }) => {
+  const styles = useStyles();
+  const [isInitialized, setIsInitialized] = React.useState(false);
+  const [tab, setTab] = React.useState<TabValue>("offset");
+  const [queryEditorPropsOffset, setQueryEditorPropsOffset] = React.useState<QueryEditorProps>({
+    connectionId: "",
+    databaseName: "",
+    containerName: "",
+    defaultQueryText: "{}",
+    queryInputLabel: "Enter query",
+    queryButtonLabel: "Submit",
+    pagingType: "offset",
+    onSubmitQuery
+  });
+  const [queryEditorPropsInfinite, setQueryEditorPropsInfinite] = React.useState<QueryEditorProps>({
+    connectionId: "",
+    databaseName: "initial",
+    containerName: "",
+    defaultQueryText: "{}",
+    queryInputLabel: "Enter query",
+    queryButtonLabel: "Submit",
+    pagingType: "infinite",
+    onSubmitQuery: (connectionId: string, query: UserQuery) => {
+      if (queryEditorPropsInfinite.queryResult && (query.pagingInfo as QueryInfinitePagingInfo)?.continuationToken === undefined) {
+        queryEditorPropsInfinite.queryResult = undefined;
+      }
+      return onSubmitQuery(connectionId, query);
     }
-    return onSubmitQuery(connectionId, query);
-  }
-};
-
-const queryEditorPropsProgress: QueryEditorProps = {
-  connectionId: "connectionId",
-  databaseName: "databaseName",
-  containerName: "containerName",
-  defaultQueryText: "{}",
-  queryInputLabel: "Enter query",
-  queryButtonLabel: "Submit",
-  pagingType: "offset",
-  onSubmitQuery: () => {},
-  progress: {
-    spinner: true,
-  },
-  isInputDisabled: true,
-  isSubmitDisabled: true
-};
-
-
-window.addEventListener('message', event => {
-  const message: QueryEditorMessage = event.data; // The JSON data our extension sent
-  // console.log('Webview received', message);
+  });
+  const queryEditorPropsProgress ={
+    connectionId: "connectionId",
+    databaseName: "databaseName",
+    containerName: "containerName",
+    defaultQueryText: "{}",
+    queryInputLabel: "Enter query",
+    queryButtonLabel: "Submit",
+    pagingType: "offset" as "offset" | "infinite",
+    onSubmitQuery: () => {},
+    progress: {
+      spinner: true,
+    },
+    isInputDisabled: true,
+    isSubmitDisabled: true
+  };
 
   const onClear = () => {
-    queryEditorPropsOffset.queryResult = undefined;
-    queryEditorPropsInfinite.queryResult = undefined;
-    render();
+    setQueryEditorPropsOffset({
+      ...queryEditorPropsOffset,
+      queryResult: undefined
+    });
+
+    setQueryEditorPropsInfinite({
+      ...queryEditorPropsInfinite,
+      queryResult: undefined
+    });
   };
 
-  const render = () => {
-    root.render(
-      <React.StrictMode>
-        <DefaultButton text="Clear" onClick={onClear} />
+  const listenerFct = useCallback((event: MessageEvent) => {
+    const message: QueryEditorMessage = event.data; // The JSON data our extension sent
+    if (message.type) {
+      console.log('Webview received', message);
+    }
 
-        <h1>Offset pagination</h1>
-        <QueryEditor {...queryEditorPropsOffset} />
+    switch (message.type) {
+      case "initialize": {
+        setQueryEditorPropsOffset({
+          ...queryEditorPropsOffset,
+          connectionId: JSON.stringify(message.data),
+          databaseName: message.data.databaseName,
+          containerName: message.data.containerName,
+        });
 
-        <h1>Infinite scrolling pagination</h1>
-        <QueryEditor {...queryEditorPropsInfinite} />
-
-        <h1>Progress indicator</h1>
-        <QueryEditor {...queryEditorPropsProgress} />
-
-      </React.StrictMode>
-    );
-  };
-
-  switch (message.type) {
-    case "initialize":
-      queryEditorPropsOffset.connectionId = JSON.stringify(message.data);
-      queryEditorPropsOffset.databaseName = message.data.databaseName;
-      queryEditorPropsOffset.containerName = message.data.containerName;
-
-      queryEditorPropsInfinite.connectionId = JSON.stringify(message.data);
-      queryEditorPropsInfinite.databaseName = message.data.databaseName;
-      queryEditorPropsInfinite.containerName = message.data.containerName;
-      break;
-    case "queryResult":
-      if (message.data.pagingInfo?.kind === "offset") {
-        queryEditorPropsOffset.queryResult = message.data;
-        queryEditorPropsInfinite.queryResult = undefined;
-
-      } else if (message.data.pagingInfo?.kind === "infinite") {
-        if (queryEditorPropsInfinite.queryResult === undefined) {
-          queryEditorPropsInfinite.queryResult = message.data;
-        } else {
-          const documents = queryEditorPropsInfinite.queryResult.documents.concat(message.data.documents);
-          queryEditorPropsInfinite.queryResult = { ...message.data, documents };
-        }
-
-        queryEditorPropsOffset.queryResult = undefined;
+        setQueryEditorPropsInfinite({
+          ...queryEditorPropsInfinite,
+          connectionId: JSON.stringify(message.data),
+          databaseName: message.data.databaseName,
+          containerName: message.data.containerName,
+        });
       }
-      break;
-    default:
-      // console.log("Unknown type", message);
-      return;
-  }
+        break;
+      case "queryResult":
+        if (message.data.pagingInfo?.kind === "offset") {
+          setQueryEditorPropsOffset({
+            ...queryEditorPropsOffset,
+          queryResult: message.data,
+          });
 
-  render();
-});
+        } else if (message.data.pagingInfo?.kind === "infinite") {
+          if (queryEditorPropsInfinite!.queryResult === undefined) {
+            setQueryEditorPropsInfinite({
+              ...queryEditorPropsInfinite,
+              queryResult: message.data,
+            });
+          } else {
+            const documents = queryEditorPropsInfinite.queryResult.documents.concat(message.data.documents);
+            queryEditorPropsInfinite.queryResult = { ...message.data, documents };
+          }
 
-root.render(
-  <React.StrictMode>
-    <Bootstrapper onReady={onReady} />
-  </React.StrictMode>
-);
+          queryEditorPropsOffset.queryResult = undefined;
+        }
+        break;
+      default:
+        // console.log("Unknown type", message);
+        return;
+    }
+  }, [queryEditorPropsOffset, queryEditorPropsInfinite]);
+
+  useEffect(() => {
+    console.log("Bootstrapper.useEffect setup");
+    window.addEventListener('message', listenerFct);
+    setIsInitialized(true);
+
+    if(!isInitialized) {
+      props.onReady();
+    }
+
+    return () => {
+      window.removeEventListener("message", listenerFct);
+      console.log("Bootstrapper.useEffect cleanup");
+    };
+  }, [listenerFct, isInitialized]);
+
+  return (
+    <FluentProvider theme={teamsLightTheme}>
+      <div className={styles.root}>
+        <TabList size="small" defaultSelectedValue={tab} onTabSelect={(event, tab) => setTab(tab.value as TabValue)}>
+          <Tab value="offset">Offset pagination</Tab>
+          <Tab value="infinite">Infinite pagination</Tab>
+          <Tab value="progress">Progress indicator</Tab>
+        </TabList>
+        <div>
+          <h1>{titleStrings[tab]}</h1>
+          <Button onClick={onClear} >Clear</Button>
+          {tab === "offset" && <QueryEditor key="offset" {...queryEditorPropsOffset} />}
+          {tab === "infinite" && <QueryEditor key="infinite" {...queryEditorPropsInfinite} />}
+          {tab === "progress" && <QueryEditor key="progress" {...queryEditorPropsProgress} />}
+        </div>
+      </div>
+    </FluentProvider>
+  );
+  // return <>Not initialized yet</>;
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+root.render(<Bootstrapper onReady={onReady} />);

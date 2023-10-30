@@ -84,7 +84,7 @@ type QueryOffsetPagingInfo = {
  * Query infinite paging information
  * @public
  */
-type QueryInfinitePagingInfo = {
+export type QueryInfinitePagingInfo = {
   kind: "infinite";
 
   /**
