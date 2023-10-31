@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import "./QueryEditor.css";
 import { JsonEditor } from "./react-jsondata-editor";
-import { Stack } from "@fluentui/react/lib/Stack";
-import { TextField } from "@fluentui/react/lib/TextField";
-import { PrimaryButton } from "@fluentui/react/lib/Button";
-import { Link } from "@fluentui/react";
-import { ProgressIndicator } from "@fluentui/react/lib/ProgressIndicator";
+import {
+  Button,
+  Input,
+  InputOnChangeData,
+  Link,
+  ProgressBar,
+} from "@fluentui/react-components";
+import Split from '@uiw/react-split';
 
 /**
  * Query result offset paging information
@@ -155,12 +158,14 @@ export interface QueryEditorProps {
 
   /**
    * Label displayed for the query input UI element
+   * @deprecated Not used anymore
    */
   queryInputLabel: string;
 
   /**
    * Label for the query submit button
    */
+
   queryButtonLabel: string;
 
   /**
@@ -280,116 +285,97 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
   const { queryResult } = props;
 
   return (
-    <div className="App">
-      <Stack
-        tokens={{
-          childrenGap: 10,
-          padding: 10,
-        }}
-      >
-        <div>
-          <h1>
-            {props.databaseName}.<small>{props.containerName}</small>
-          </h1>
-        </div>
-        <Stack horizontal verticalAlign="end">
-          <TextField
+      <Split mode="vertical">
+        <div style={{ height: '20%', overflow: "auto" }}>
+          <Input
             className="queryInput"
-            label={props.queryInputLabel}
             value={query}
-            onChange={(evt, newText: string | undefined) => setQuery(newText)}
+            onChange={(
+              ev: ChangeEvent<HTMLInputElement>,
+              data: InputOnChangeData
+            ) => setQuery(data.value)}
             disabled={props.isInputDisabled}
           />
-          <PrimaryButton
+          <Button
             onClick={() => handleSubmit({ offset: 0 })}
             disabled={props.isSubmitDisabled}
           >
             {props.queryButtonLabel}
-          </PrimaryButton>
-        </Stack>
-        {props.progress?.spinner && <ProgressIndicator />}
-        {queryResult && (
-          <>
-            <Stack
-              horizontal
-              tokens={{
-                childrenGap: 60,
-                padding: 10,
-              }}
-            >
-              <Stack horizontal tokens={{ childrenGap: 20 }}>
-                <input
-                  type="radio"
-                  name="renderJson"
-                  value="tree"
-                  checked={renderAsTree}
-                  onChange={() => setRenderAsTree(true)}
-                />
-                Tree
-                <input
-                  type="radio"
-                  name="renderJson"
-                  value="text"
-                  checked={!renderAsTree}
-                  onChange={() => setRenderAsTree(false)}
-                />
-                Text
-              </Stack>
-              {props.pagingType === "offset" && (
-                <OffsetPaginator
-                  connectionId={props.connectionId}
-                  queryText={query}
-                  resultLength={queryResult.documents.length}
-                  onPageRequestSubmit={handleSubmit}
-                  pagingInfo={
-                    props.queryResult?.pagingInfo as ResultOffsetPagingInfo
-                  }
-                />
-              )}
-            </Stack>
-            {renderAsTree && (
-              <div className="jsonEditor">
-                <JsonEditor
-                  jsonObject={JSON.stringify(queryResult.documents, null, "")}
-                  onChange={(output: unknown) => {
-                    console.log(output);
-                  }}
-                  hideInsertObjectButton={true}
-                  expandToGeneration={0}
-                  isReadOnly={true}
-                />
-              </div>
-            )}
-            {!renderAsTree && (
+          </Button>
+        </div>
+        <div style={{ height: '80%', overflow: "auto" }}>
+          {props.progress?.spinner && <ProgressBar />}
+          {queryResult && (
+            <>
               <div>
-                <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
+                <span>
+                  <input
+                    type="radio"
+                    name="renderJson"
+                    value="tree"
+                    checked={renderAsTree}
+                    onChange={() => setRenderAsTree(true)}
+                  />
+                  Tree
+                  <input
+                    type="radio"
+                    name="renderJson"
+                    value="text"
+                    checked={!renderAsTree}
+                    onChange={() => setRenderAsTree(false)}
+                  />
+                  Text
+                </span>
+                {props.pagingType === "offset" && (
+                  <OffsetPaginator
+                    connectionId={props.connectionId}
+                    queryText={query}
+                    resultLength={queryResult.documents.length}
+                    onPageRequestSubmit={handleSubmit}
+                    pagingInfo={
+                      props.queryResult?.pagingInfo as ResultOffsetPagingInfo
+                    }
+                  />
+                )}
               </div>
-            )}
-            {props.pagingType === "infinite" &&
-              (queryResult.pagingInfo as ResultInfinitePagingInfo)
-                ?.continuationToken && (
-                <Link
-                  href=""
-                  underline
-                  onClick={() =>
-                    handleSubmit({
-                      continuationToken: (
-                        queryResult.pagingInfo as ResultInfinitePagingInfo
-                      )?.continuationToken,
-                    })
-                  }
-                >
-                  {props.loadMoreLabel || "Load more items"}
-                </Link>
+              {renderAsTree && (
+                <div className="jsonEditor">
+                  <JsonEditor
+                    jsonObject={JSON.stringify(queryResult.documents, null, "")}
+                    onChange={(output: unknown) => {
+                      console.log(output);
+                    }}
+                    hideInsertObjectButton={true}
+                    expandToGeneration={0}
+                    isReadOnly={true}
+                  />
+                </div>
               )}
-          </>
-        )}
-        {/* {props.queryResult && props.queryResult.map((r: any) => (
-          <p key={r["_id"]}>{JSON.stringify(r)}</p>
-          )
-        )} */}
-      </Stack>
-    </div>
+              {!renderAsTree && (
+                <div>
+                  <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
+                </div>
+              )}
+              {props.pagingType === "infinite" &&
+                (queryResult.pagingInfo as ResultInfinitePagingInfo)
+                  ?.continuationToken && (
+                  <Link
+                    href=""
+                    onClick={() =>
+                      handleSubmit({
+                        continuationToken: (
+                          queryResult.pagingInfo as ResultInfinitePagingInfo
+                        )?.continuationToken,
+                      })
+                    }
+                  >
+                    {props.loadMoreLabel || "Load more items"}
+                  </Link>
+                )}
+            </>
+          )}
+        </div>
+      </Split>
   );
 };
 
@@ -410,7 +396,7 @@ const OffsetPaginator = (props: {
   const { limit, offset, total } = props.pagingInfo;
 
   return (
-    <Stack horizontal tokens={{ childrenGap: 10 }}>
+    <span>
       {offset !== undefined && limit !== undefined ? (
         <span>
           Showing {offset} to {offset + limit} of {total}{" "}
@@ -447,6 +433,6 @@ const OffsetPaginator = (props: {
           &#62;
         </button>
       </div>
-    </Stack>
+    </span>
   );
 };

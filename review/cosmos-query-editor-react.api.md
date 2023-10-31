@@ -32,6 +32,7 @@ export interface QueryEditorProps {
         message?: string;
     };
     queryButtonLabel: string;
+    // @deprecated
     queryInputLabel: string;
     queryResult?: QueryResult;
 }

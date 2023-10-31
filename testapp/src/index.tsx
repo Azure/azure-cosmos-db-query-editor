@@ -20,6 +20,8 @@ const useStyles = makeStyles({
     justifyContent: "flex-start",
     // ...shorthands.padding("50px", "20px"),
     rowGap: "20px",
+    backgroundColor: "lightyellow",
+    height: "100%",
   },
 });
 
@@ -172,21 +174,21 @@ const Bootstrapper: React.FC<{ onReady: () => void }> = (props: { onReady: () =>
   }, [listenerFct, isInitialized]);
 
   return (
-    <FluentProvider theme={teamsLightTheme}>
-      <div className={styles.root}>
+    <FluentProvider theme={teamsLightTheme} style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <TabList size="small" defaultSelectedValue={tab} onTabSelect={(event, tab) => setTab(tab.value as TabValue)}>
           <Tab value="offset">Offset pagination</Tab>
           <Tab value="infinite">Infinite pagination</Tab>
           <Tab value="progress">Progress indicator</Tab>
         </TabList>
-        <div>
-          <h1>{titleStrings[tab]}</h1>
+        <div style={{ display: "flex" }}>
+          <h3>{titleStrings[tab]}</h3>
           <Button onClick={onClear} >Clear</Button>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", overflow: "auto", flexGrow: 1, border: "2px black solid" }}>
           {tab === "offset" && <QueryEditor key="offset" {...queryEditorPropsOffset} />}
           {tab === "infinite" && <QueryEditor key="infinite" {...queryEditorPropsInfinite} />}
           {tab === "progress" && <QueryEditor key="progress" {...queryEditorPropsProgress} />}
         </div>
-      </div>
     </FluentProvider>
   );
   // return <>Not initialized yet</>;
