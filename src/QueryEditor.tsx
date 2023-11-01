@@ -3,12 +3,24 @@ import "./QueryEditor.css";
 import { JsonEditor } from "./react-jsondata-editor";
 import {
   Button,
-  Input,
-  InputOnChangeData,
   Link,
   ProgressBar,
+  Tab,
+  TabList,
+  Textarea,
+  TextareaOnChangeData,
+  ToggleButton,
+  Toolbar,
+  ToolbarButton,
 } from "@fluentui/react-components";
-import Split from '@uiw/react-split';
+import Split from "@uiw/react-split";
+import {
+  Play16Regular,
+  TextBulletListTree16Regular,
+  Braces16Regular,
+  ArrowLeft12Regular,
+  ArrowRight12Regular,
+} from "@fluentui/react-icons";
 
 /**
  * Query result offset paging information
@@ -164,8 +176,8 @@ export interface QueryEditorProps {
 
   /**
    * Label for the query submit button
+   * @deprecated Not used anymore
    */
-
   queryButtonLabel: string;
 
   /**
@@ -285,76 +297,79 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
   const { queryResult } = props;
 
   return (
-      <Split mode="vertical">
-        <div style={{ height: '20%', overflow: "auto" }}>
-          <Input
-            className="queryInput"
-            value={query}
-            onChange={(
-              ev: ChangeEvent<HTMLInputElement>,
-              data: InputOnChangeData
-            ) => setQuery(data.value)}
-            disabled={props.isInputDisabled}
-          />
-          <Button
+    <Split mode="vertical">
+      <div
+        style={{
+          height: "20%",
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Toolbar aria-label="toolbar" size="small">
+          <ToolbarButton
+            aria-label="Run"
+            appearance="subtle"
+            icon={<Play16Regular />}
             onClick={() => handleSubmit({ offset: 0 })}
             disabled={props.isSubmitDisabled}
           >
-            {props.queryButtonLabel}
-          </Button>
-        </div>
-        <div style={{ height: '80%', overflow: "auto" }}>
-          {props.progress?.spinner && <ProgressBar />}
-          {queryResult && (
-            <>
-              <div>
-                <span>
-                  <input
-                    type="radio"
-                    name="renderJson"
-                    value="tree"
-                    checked={renderAsTree}
-                    onChange={() => setRenderAsTree(true)}
-                  />
+            Run
+          </ToolbarButton>
+          {/* <ToolbarButton aria-label="Learn More" appearance="subtle" icon={<Library16Regular />}
+            onClick={() => handleSubmit({ offset: 0 })}
+            disabled={props.isSubmitDisabled}
+          >Learn More</ToolbarButton> */}
+        </Toolbar>
+        <Textarea
+          style={{ width: "100%", flexGrow: 1 }}
+          value={query}
+          onChange={(
+            ev: ChangeEvent<HTMLTextAreaElement>,
+            data: TextareaOnChangeData
+          ) => setQuery(data.value)}
+          disabled={props.isInputDisabled}
+        />
+      </div>
+      <div style={{ height: "80%", overflow: "auto", margin: 20 }}>
+        {props.progress?.spinner && <ProgressBar />}
+        {queryResult && (
+          <>
+            <TabList size="small" defaultSelectedValue="results">
+              <Tab value="results">Results</Tab>
+            </TabList>
+            <div style={{ display: "flex", columnGap: 20 }}>
+              <span>
+                <ToggleButton
+                  appearance="transparent"
+                  icon={<TextBulletListTree16Regular />}
+                  size="small"
+                  onClick={() => setRenderAsTree(true)}
+                  checked={renderAsTree}
+                >
                   Tree
-                  <input
-                    type="radio"
-                    name="renderJson"
-                    value="text"
-                    checked={!renderAsTree}
-                    onChange={() => setRenderAsTree(false)}
-                  />
+                </ToggleButton>
+                |
+                <ToggleButton
+                  appearance="transparent"
+                  icon={<Braces16Regular />}
+                  size="small"
+                  onClick={() => setRenderAsTree(false)}
+                  checked={!renderAsTree}
+                >
                   Text
-                </span>
-                {props.pagingType === "offset" && (
-                  <OffsetPaginator
-                    connectionId={props.connectionId}
-                    queryText={query}
-                    resultLength={queryResult.documents.length}
-                    onPageRequestSubmit={handleSubmit}
-                    pagingInfo={
-                      props.queryResult?.pagingInfo as ResultOffsetPagingInfo
-                    }
-                  />
-                )}
-              </div>
-              {renderAsTree && (
-                <div className="jsonEditor">
-                  <JsonEditor
-                    jsonObject={JSON.stringify(queryResult.documents, null, "")}
-                    onChange={(output: unknown) => {
-                      console.log(output);
-                    }}
-                    hideInsertObjectButton={true}
-                    expandToGeneration={0}
-                    isReadOnly={true}
-                  />
-                </div>
-              )}
-              {!renderAsTree && (
-                <div>
-                  <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
-                </div>
+                </ToggleButton>
+              </span>
+              {props.pagingType === "offset" && (
+                <OffsetPaginator
+                  connectionId={props.connectionId}
+                  queryText={query}
+                  resultLength={queryResult.documents.length}
+                  onPageRequestSubmit={handleSubmit}
+                  pagingInfo={
+                    props.queryResult?.pagingInfo as ResultOffsetPagingInfo
+                  }
+                />
               )}
               {props.pagingType === "infinite" &&
                 (queryResult.pagingInfo as ResultInfinitePagingInfo)
@@ -372,10 +387,29 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                     {props.loadMoreLabel || "Load more items"}
                   </Link>
                 )}
-            </>
-          )}
-        </div>
-      </Split>
+            </div>
+            {renderAsTree && (
+              <div className="jsonEditor">
+                <JsonEditor
+                  jsonObject={JSON.stringify(queryResult.documents, null, "")}
+                  onChange={(output: unknown) => {
+                    console.log(output);
+                  }}
+                  hideInsertObjectButton={true}
+                  expandToGeneration={0}
+                  isReadOnly={true}
+                />
+              </div>
+            )}
+            {!renderAsTree && (
+              <div>
+                <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </Split>
   );
 };
 
@@ -396,17 +430,19 @@ const OffsetPaginator = (props: {
   const { limit, offset, total } = props.pagingInfo;
 
   return (
-    <span>
+    <span style={{ display: "flex", columnGap: 10 }}>
       {offset !== undefined && limit !== undefined ? (
         <span>
-          Showing {offset} to {offset + limit} of {total}{" "}
+          {offset} to {offset + limit} of {total}
         </span>
       ) : (
         <span>Error offset or limit not specified</span>
       )}
 
       <div>
-        <button
+        <Button
+          size="small"
+          icon={<ArrowLeft12Regular />}
           disabled={offset <= 0}
           onClick={() =>
             props.onPageRequestSubmit({
@@ -416,10 +452,10 @@ const OffsetPaginator = (props: {
                   : undefined,
             })
           }
-        >
-          &#60;
-        </button>
-        <button
+        />
+        <Button
+          size="small"
+          icon={<ArrowRight12Regular />}
           disabled={offset + props.resultLength >= total}
           onClick={() =>
             props.onPageRequestSubmit({
@@ -429,9 +465,7 @@ const OffsetPaginator = (props: {
                   : undefined,
             })
           }
-        >
-          &#62;
-        </button>
+        />
       </div>
     </span>
   );

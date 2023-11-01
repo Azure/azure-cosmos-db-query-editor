@@ -16,14 +16,16 @@
     "cssnano": "6.0.1",
     "parcel": "2.10.0",
     "parcel-bundler": "1.12.5",
-    "postcss": "8.4.31"
+    "postcss": "8.4.31",
+    "rimraf": "5.0.5"
   },
   "alias": {
     "react": "../node_modules/react",
     "react-dom": "../node_modules/react-dom"
   },
   "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "clean": "rimraf dist .parce-cache",
+    "start": "npm run clean && parcel index.html --open",
+    "build": "npm run clean && parcel build index.html"
   }
 }
