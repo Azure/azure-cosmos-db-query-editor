@@ -17,6 +17,6 @@ test("renders query editor", () => {
       }}
     />
   );
-  const buttonElement = screen.getByText(/Submit/i);
+  const buttonElement = screen.getByText(/Run/i);
   expect(buttonElement).toBeInTheDocument();
 });
