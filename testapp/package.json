@@ -24,7 +24,7 @@
     "react-dom": "../node_modules/react-dom"
   },
   "scripts": {
-    "clean": "rimraf dist .parce-cache",
+    "clean": "rimraf dist .parcel-cache",
     "start": "npm run clean && parcel index.html --open",
     "build": "npm run clean && parcel build index.html"
   }

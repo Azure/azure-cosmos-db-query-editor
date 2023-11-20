@@ -300,7 +300,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
     <Split mode="vertical">
       <div
         style={{
-          height: "20%",
+          height: "30%",
           overflow: "auto",
           display: "flex",
           flexDirection: "column",
@@ -331,65 +331,76 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
           disabled={props.isInputDisabled}
         />
       </div>
-      <div style={{ height: "80%", overflow: "auto", margin: 20 }}>
+      <div
+        style={{
+          height: "70%",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          margin: 10,
+          marginBottom: 60,
+        }}
+      >
         {props.progress?.spinner && <ProgressBar />}
         {queryResult && (
           <>
-            <TabList size="small" defaultSelectedValue="results">
-              <Tab value="results">Results</Tab>
-            </TabList>
-            <div style={{ display: "flex", columnGap: 20 }}>
-              <span>
-                <ToggleButton
-                  appearance="transparent"
-                  icon={<TextBulletListTree16Regular />}
-                  size="small"
-                  onClick={() => setRenderAsTree(true)}
-                  checked={renderAsTree}
-                >
-                  Tree
-                </ToggleButton>
-                |
-                <ToggleButton
-                  appearance="transparent"
-                  icon={<Braces16Regular />}
-                  size="small"
-                  onClick={() => setRenderAsTree(false)}
-                  checked={!renderAsTree}
-                >
-                  Text
-                </ToggleButton>
-              </span>
-              {props.pagingType === "offset" && (
-                <OffsetPaginator
-                  connectionId={props.connectionId}
-                  queryText={query}
-                  resultLength={queryResult.documents.length}
-                  onPageRequestSubmit={handleSubmit}
-                  pagingInfo={
-                    props.queryResult?.pagingInfo as ResultOffsetPagingInfo
-                  }
-                />
-              )}
-              {props.pagingType === "infinite" &&
-                (queryResult.pagingInfo as ResultInfinitePagingInfo)
-                  ?.continuationToken && (
-                  <Link
-                    href=""
-                    onClick={() =>
-                      handleSubmit({
-                        continuationToken: (
-                          queryResult.pagingInfo as ResultInfinitePagingInfo
-                        )?.continuationToken,
-                      })
-                    }
+            <div style={{ marginBottom: 10 }}>
+              <TabList size="small" defaultSelectedValue="results">
+                <Tab value="results">Results</Tab>
+              </TabList>
+              <div style={{ display: "flex", columnGap: 20 }}>
+                <span>
+                  <ToggleButton
+                    appearance="transparent"
+                    icon={<TextBulletListTree16Regular />}
+                    size="small"
+                    onClick={() => setRenderAsTree(true)}
+                    checked={renderAsTree}
                   >
-                    {props.loadMoreLabel || "Load more items"}
-                  </Link>
+                    Tree
+                  </ToggleButton>
+                  |
+                  <ToggleButton
+                    appearance="transparent"
+                    icon={<Braces16Regular />}
+                    size="small"
+                    onClick={() => setRenderAsTree(false)}
+                    checked={!renderAsTree}
+                  >
+                    Text
+                  </ToggleButton>
+                </span>
+                {props.pagingType === "offset" && (
+                  <OffsetPaginator
+                    connectionId={props.connectionId}
+                    queryText={query}
+                    resultLength={queryResult.documents.length}
+                    onPageRequestSubmit={handleSubmit}
+                    pagingInfo={
+                      props.queryResult?.pagingInfo as ResultOffsetPagingInfo
+                    }
+                  />
                 )}
+                {props.pagingType === "infinite" &&
+                  (queryResult.pagingInfo as ResultInfinitePagingInfo)
+                    ?.continuationToken && (
+                    <Link
+                      href=""
+                      onClick={() =>
+                        handleSubmit({
+                          continuationToken: (
+                            queryResult.pagingInfo as ResultInfinitePagingInfo
+                          )?.continuationToken,
+                        })
+                      }
+                    >
+                      {props.loadMoreLabel || "Load more items"}
+                    </Link>
+                  )}
+              </div>
             </div>
             {renderAsTree && (
-              <div className="jsonEditor">
+              <div className="jsonEditor" style={{ overflow: "auto" }}>
                 <JsonEditor
                   jsonObject={JSON.stringify(queryResult.documents, null, "")}
                   onChange={(output: unknown) => {
@@ -402,7 +413,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               </div>
             )}
             {!renderAsTree && (
-              <div>
+              <div style={{ overflow: "auto" }}>
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}

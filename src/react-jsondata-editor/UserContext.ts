@@ -16,7 +16,7 @@ const UserContext = createContext({
   },
   key: {
     color: "black",
-    font: "16px/26px Arial, Helvetica, sans-serif",
+    font: "14px/26px Arial, Helvetica, sans-serif",
   },
   values: {
     font: "14px/26px Arial, Helvetica, sans-serif",
