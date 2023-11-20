@@ -27,11 +27,11 @@ export const acquireVsCodeApi = () => ({
         data: {
           connectionId: "connectionId",
           databaseName: "databaseName",
-          collectionName: "collectionName"
+          containerName: "containerName"
         }
       });
       break;
-    case "submitQuery":
+    case "submitQuery": {
       const query = msg.query;
       if (query.pagingInfo.kind === "offset") {
         const offset = query.pagingInfo.offset ?? 0;
@@ -66,8 +66,8 @@ export const acquireVsCodeApi = () => ({
         };
         window.postMessage(response);
       }
-
-      break;
+    }
+    break;
   }
   }
 });

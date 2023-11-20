@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import "./QueryEditor.css";
 import { JsonEditor } from "./react-jsondata-editor";
-import { Stack } from "@fluentui/react/lib/Stack";
-import { TextField } from "@fluentui/react/lib/TextField";
-import { PrimaryButton } from "@fluentui/react/lib/Button";
-import { Link } from "@fluentui/react";
-import { ProgressIndicator } from "@fluentui/react/lib/ProgressIndicator";
+import {
+  Button,
+  Link,
+  Spinner,
+  Tab,
+  TabList,
+  Textarea,
+  TextareaOnChangeData,
+  ToggleButton,
+  Toolbar,
+  ToolbarButton,
+} from "@fluentui/react-components";
+import Split from "@uiw/react-split";
+import {
+  Play16Regular,
+  TextBulletListTree16Regular,
+  Braces16Regular,
+  ArrowLeft12Regular,
+  ArrowRight12Regular,
+} from "@fluentui/react-icons";
 
 /**
  * Query result offset paging information
@@ -84,7 +99,7 @@ type QueryOffsetPagingInfo = {
  * Query infinite paging information
  * @public
  */
-type QueryInfinitePagingInfo = {
+export type QueryInfinitePagingInfo = {
   kind: "infinite";
 
   /**
@@ -155,11 +170,13 @@ export interface QueryEditorProps {
 
   /**
    * Label displayed for the query input UI element
+   * @deprecated Not used anymore
    */
   queryInputLabel: string;
 
   /**
    * Label for the query submit button
+   * @deprecated Not used anymore
    */
   queryButtonLabel: string;
 
@@ -280,75 +297,110 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
   const { queryResult } = props;
 
   return (
-    <div className="App">
-      <Stack
-        tokens={{
-          childrenGap: 10,
-          padding: 10,
+    <Split mode="vertical">
+      <div
+        style={{
+          height: "30%",
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <div>
-          <h1>
-            {props.databaseName}.<small>{props.containerName}</small>
-          </h1>
-        </div>
-        <Stack horizontal verticalAlign="end">
-          <TextField
-            className="queryInput"
-            label={props.queryInputLabel}
-            value={query}
-            onChange={(evt, newText: string | undefined) => setQuery(newText)}
-            disabled={props.isInputDisabled}
-          />
-          <PrimaryButton
+        <Toolbar aria-label="toolbar" size="small">
+          <ToolbarButton
+            aria-label="Run"
+            appearance="subtle"
+            icon={<Play16Regular />}
             onClick={() => handleSubmit({ offset: 0 })}
             disabled={props.isSubmitDisabled}
           >
-            {props.queryButtonLabel}
-          </PrimaryButton>
-        </Stack>
-        {props.progress?.spinner && <ProgressIndicator />}
+            Run
+          </ToolbarButton>
+          {/* <ToolbarButton aria-label="Learn More" appearance="subtle" icon={<Library16Regular />}
+            onClick={() => handleSubmit({ offset: 0 })}
+            disabled={props.isSubmitDisabled}
+          >Learn More</ToolbarButton> */}
+        </Toolbar>
+        <Textarea
+          style={{ width: "100%", flexGrow: 1 }}
+          value={query}
+          onChange={(
+            ev: ChangeEvent<HTMLTextAreaElement>,
+            data: TextareaOnChangeData
+          ) => setQuery(data.value)}
+          disabled={props.isInputDisabled}
+        />
+      </div>
+      <div
+        style={{
+          height: "70%",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          margin: 10,
+          marginBottom: 60,
+        }}
+      >
+        {props.progress?.spinner && <Spinner />}
         {queryResult && (
           <>
-            <Stack
-              horizontal
-              tokens={{
-                childrenGap: 60,
-                padding: 10,
-              }}
-            >
-              <Stack horizontal tokens={{ childrenGap: 20 }}>
-                <input
-                  type="radio"
-                  name="renderJson"
-                  value="tree"
-                  checked={renderAsTree}
-                  onChange={() => setRenderAsTree(true)}
-                />
-                Tree
-                <input
-                  type="radio"
-                  name="renderJson"
-                  value="text"
-                  checked={!renderAsTree}
-                  onChange={() => setRenderAsTree(false)}
-                />
-                Text
-              </Stack>
-              {props.pagingType === "offset" && (
-                <OffsetPaginator
-                  connectionId={props.connectionId}
-                  queryText={query}
-                  resultLength={queryResult.documents.length}
-                  onPageRequestSubmit={handleSubmit}
-                  pagingInfo={
-                    props.queryResult?.pagingInfo as ResultOffsetPagingInfo
-                  }
-                />
-              )}
-            </Stack>
+            <div style={{ marginBottom: 10 }}>
+              <TabList size="small" defaultSelectedValue="results">
+                <Tab value="results">Results</Tab>
+              </TabList>
+              <div style={{ display: "flex", columnGap: 20 }}>
+                <span>
+                  <ToggleButton
+                    appearance="transparent"
+                    icon={<TextBulletListTree16Regular />}
+                    size="small"
+                    onClick={() => setRenderAsTree(true)}
+                    checked={renderAsTree}
+                  >
+                    Tree
+                  </ToggleButton>
+                  |
+                  <ToggleButton
+                    appearance="transparent"
+                    icon={<Braces16Regular />}
+                    size="small"
+                    onClick={() => setRenderAsTree(false)}
+                    checked={!renderAsTree}
+                  >
+                    Text
+                  </ToggleButton>
+                </span>
+                {props.pagingType === "offset" && (
+                  <OffsetPaginator
+                    connectionId={props.connectionId}
+                    queryText={query}
+                    resultLength={queryResult.documents.length}
+                    onPageRequestSubmit={handleSubmit}
+                    pagingInfo={
+                      props.queryResult?.pagingInfo as ResultOffsetPagingInfo
+                    }
+                  />
+                )}
+                {props.pagingType === "infinite" &&
+                  (queryResult.pagingInfo as ResultInfinitePagingInfo)
+                    ?.continuationToken && (
+                    <Link
+                      href=""
+                      onClick={() =>
+                        handleSubmit({
+                          continuationToken: (
+                            queryResult.pagingInfo as ResultInfinitePagingInfo
+                          )?.continuationToken,
+                        })
+                      }
+                    >
+                      {props.loadMoreLabel || "Load more items"}
+                    </Link>
+                  )}
+              </div>
+            </div>
             {renderAsTree && (
-              <div className="jsonEditor">
+              <div className="jsonEditor" style={{ overflow: "auto" }}>
                 <JsonEditor
                   jsonObject={JSON.stringify(queryResult.documents, null, "")}
                   onChange={(output: unknown) => {
@@ -361,35 +413,14 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               </div>
             )}
             {!renderAsTree && (
-              <div>
+              <div style={{ overflow: "auto" }}>
                 <pre>{JSON.stringify(queryResult.documents, null, 2)}</pre>
               </div>
             )}
-            {props.pagingType === "infinite" &&
-              (queryResult.pagingInfo as ResultInfinitePagingInfo)
-                ?.continuationToken && (
-                <Link
-                  href=""
-                  underline
-                  onClick={() =>
-                    handleSubmit({
-                      continuationToken: (
-                        queryResult.pagingInfo as ResultInfinitePagingInfo
-                      )?.continuationToken,
-                    })
-                  }
-                >
-                  {props.loadMoreLabel || "Load more items"}
-                </Link>
-              )}
           </>
         )}
-        {/* {props.queryResult && props.queryResult.map((r: any) => (
-          <p key={r["_id"]}>{JSON.stringify(r)}</p>
-          )
-        )} */}
-      </Stack>
-    </div>
+      </div>
+    </Split>
   );
 };
 
@@ -410,17 +441,19 @@ const OffsetPaginator = (props: {
   const { limit, offset, total } = props.pagingInfo;
 
   return (
-    <Stack horizontal tokens={{ childrenGap: 10 }}>
+    <span style={{ display: "flex", columnGap: 10 }}>
       {offset !== undefined && limit !== undefined ? (
         <span>
-          Showing {offset} to {offset + limit} of {total}{" "}
+          {offset} to {offset + limit} of {total}
         </span>
       ) : (
         <span>Error offset or limit not specified</span>
       )}
 
       <div>
-        <button
+        <Button
+          size="small"
+          icon={<ArrowLeft12Regular />}
           disabled={offset <= 0}
           onClick={() =>
             props.onPageRequestSubmit({
@@ -430,10 +463,10 @@ const OffsetPaginator = (props: {
                   : undefined,
             })
           }
-        >
-          &#60;
-        </button>
-        <button
+        />
+        <Button
+          size="small"
+          icon={<ArrowRight12Regular />}
           disabled={offset + props.resultLength >= total}
           onClick={() =>
             props.onPageRequestSubmit({
@@ -443,10 +476,8 @@ const OffsetPaginator = (props: {
                   : undefined,
             })
           }
-        >
-          &#62;
-        </button>
+        />
       </div>
-    </Stack>
+    </span>
   );
 };

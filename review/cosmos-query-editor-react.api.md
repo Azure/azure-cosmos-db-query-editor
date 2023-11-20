@@ -31,7 +31,9 @@ export interface QueryEditorProps {
         };
         message?: string;
     };
+    // @deprecated
     queryButtonLabel: string;
+    // @deprecated
     queryInputLabel: string;
     queryResult?: QueryResult;
 }

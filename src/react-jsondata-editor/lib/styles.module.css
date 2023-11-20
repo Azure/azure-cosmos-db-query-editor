@@ -39,7 +39,7 @@ button{
 
 .jsonListOutput{
     overflow-y: auto;
-    height: calc(100% - 44px);
+    height: 100%;
 }
 
 .nodeEmpty{
