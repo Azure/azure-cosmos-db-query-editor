@@ -4,7 +4,7 @@ import { JsonEditor } from "./react-jsondata-editor";
 import {
   Button,
   Link,
-  ProgressBar,
+  Spinner,
   Tab,
   TabList,
   Textarea,
@@ -341,7 +341,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
           marginBottom: 60,
         }}
       >
-        {props.progress?.spinner && <ProgressBar />}
+        {props.progress?.spinner && <Spinner />}
         {queryResult && (
           <>
             <div style={{ marginBottom: 10 }}>
