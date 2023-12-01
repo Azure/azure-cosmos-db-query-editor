@@ -1,5 +1,14 @@
+.github/
 .parcel-cache/
 config/
 review/
 temp/
 testapp/
+.eslintrc.json
+.gitignore
+azure-pipelines.yml
+.parcelrc
+.prettierignore
+jest.config.js
+.parcel.d.ts
+tsconfig.json
