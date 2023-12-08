@@ -23,7 +23,7 @@ const UserContext = createContext({
     null: "#E9897E",
     boolean: "#8e4cad",
     number: "#25539a",
-    string: "#797980",
+    string: "#727279",
   },
   buttons: {
     add: "#9bb7d4",

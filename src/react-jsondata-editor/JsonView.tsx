@@ -428,6 +428,7 @@ function ViewNode({
             <div
               className={styles.arrow}
               style={!isList ? { visibility: "hidden" } : {}}
+              tabIndex={0}
             >
               <i
                 className={showContent ? styles.arrowDown : styles.arrowRight}
