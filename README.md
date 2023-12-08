@@ -31,9 +31,12 @@ const queryEditorPropsInfinite: QueryEditorProps = {
 |`queryButtonLabel`| The text on the submit button|
 |`paginationType`| `"offset"`: previous/next page buttons are displayed for paging through results. `"infinite"`: a "Load more results" button appears to load more results |
 |`onSubmitQuery`| Called when the Submit button is pressed|
+| `onCancelQuery` | (Optional) Called when the cancel button is pressed |
 |`queryResult`| (Optional) The query result that the editor must display. It must be an array of json objects.|
-|`progress`| (Optional) Indicate progress in the query editor
-|`error`| (Optional) Display error
+|`progress`| (Optional) Indicate progress in the query editor |
+|`error`| (Optional) Display error |
+|`style` | (Optional) CSS styles |
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
