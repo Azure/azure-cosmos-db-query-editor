@@ -348,6 +348,7 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
           >Learn More</ToolbarButton> */}
         </Toolbar>
         <Textarea
+          aria-label="Query input"
           style={{ width: "100%", flexGrow: 1 }}
           value={query}
           onChange={(

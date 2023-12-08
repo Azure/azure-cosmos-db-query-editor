@@ -319,7 +319,11 @@ export default function Editor({
             </span>
           </div>
         )}
-        <div className={styles.jsonListOutput} ref={jsonListOutput}>
+        <div
+          className={styles.jsonListOutput}
+          ref={jsonListOutput}
+          tabIndex={0}
+        >
           <JsonView
             key={"DisplayJson"}
             input={jsonData}
