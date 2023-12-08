@@ -4,6 +4,8 @@
 
 ```ts
 
+import { default as React_2 } from 'react';
+
 // @public
 export const QueryEditor: (props: QueryEditorProps) => JSX.Element;
 
@@ -19,6 +21,7 @@ export interface QueryEditorProps {
     isInputDisabled?: boolean;
     isSubmitDisabled?: boolean;
     loadMoreLabel?: string;
+    onCancelQuery?: (connectionId: string) => void;
     onResultUpdate?: (updatedData: unknown) => void;
     onSubmitQuery: (connectionId: string, query: UserQuery) => void;
     pagingType: "offset" | "infinite";
@@ -36,6 +39,7 @@ export interface QueryEditorProps {
     // @deprecated
     queryInputLabel: string;
     queryResult?: QueryResult;
+    style?: React_2.CSSProperties;
 }
 
 // @public

@@ -16,6 +16,7 @@ import {
 import Split from "@uiw/react-split";
 import {
   Play16Regular,
+  Stop16Regular,
   TextBulletListTree16Regular,
   Braces16Regular,
   ArrowLeft12Regular,
@@ -206,6 +207,13 @@ export interface QueryEditorProps {
   onSubmitQuery: (connectionId: string, query: UserQuery) => void;
 
   /**
+   * Called when the user cancels a query by pressing the cancel button
+   * @param connectionId - Unique identifier specified as `QueryEditorProps.connectionId`
+   * @returns
+   */
+  onCancelQuery?: (connectionId: string) => void;
+
+  /**
    * Query results to be displayed by the editor
    */
   queryResult?: QueryResult;
@@ -246,6 +254,11 @@ export interface QueryEditorProps {
    * @returns
    */
   onResultUpdate?: (updatedData: unknown) => void;
+
+  /**
+   * optional style
+   */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -294,10 +307,14 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
     }
   };
 
-  const { queryResult } = props;
+  const handleCancel = () => {
+    props.onCancelQuery?.(props.connectionId);
+  };
+
+  const { queryResult, style } = props;
 
   return (
-    <Split mode="vertical">
+    <Split mode="vertical" style={style}>
       <div
         style={{
           height: "30%",
@@ -310,11 +327,20 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
           <ToolbarButton
             aria-label="Run"
             appearance="subtle"
-            icon={<Play16Regular />}
+            icon={<Play16Regular color="green" />}
             onClick={() => handleSubmit({ offset: 0 })}
             disabled={props.isSubmitDisabled}
           >
             Run
+          </ToolbarButton>
+          <ToolbarButton
+            aria-label="Cancel"
+            appearance="subtle"
+            icon={<Stop16Regular color="red" />}
+            onClick={() => handleCancel()}
+            disabled={!props.isSubmitDisabled && !props.progress}
+          >
+            Cancel
           </ToolbarButton>
           {/* <ToolbarButton aria-label="Learn More" appearance="subtle" icon={<Library16Regular />}
             onClick={() => handleSubmit({ offset: 0 })}
@@ -338,7 +364,6 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
           display: "flex",
           flexDirection: "column",
           margin: 10,
-          marginBottom: 60,
         }}
       >
         {props.progress?.spinner && <Spinner />}
@@ -348,7 +373,13 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               <TabList size="small" defaultSelectedValue="results">
                 <Tab value="results">Results</Tab>
               </TabList>
-              <div style={{ display: "flex", columnGap: 20 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingRight: 20,
+                }}
+              >
                 <span>
                   <ToggleButton
                     appearance="transparent"
