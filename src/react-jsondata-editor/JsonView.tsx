@@ -37,6 +37,7 @@ export default function JsonView({
   needLeaf = true,
   expandToGeneration,
   isReadOnly = false,
+  indexOffset,
 }: {
   input: any;
   jsonPath: string;
@@ -54,6 +55,7 @@ export default function JsonView({
   needLeaf?: boolean;
   expandToGeneration?: number;
   isReadOnly?: boolean;
+  indexOffset?: number; // For offset pagination, we increment the displayed index by this amount to reflect the current page
 }): JSX.Element {
   const typeOfInput = TypeOfValue(input);
   const userStyle = useContext(UserContext);
@@ -296,6 +298,9 @@ export default function JsonView({
   return (
     <>
       {Object.entries(input).map(([key, value]) => {
+        if (indexOffset !== undefined) {
+          key = (parseInt(key) + indexOffset).toString();
+        }
         return (
           <ViewNode
             key={jsonPath + "/" + key}

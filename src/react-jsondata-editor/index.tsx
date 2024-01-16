@@ -26,6 +26,7 @@ const JsonEditor = ({
   keyStyle,
   valueStyle,
   buttonStyle,
+  indexOffset: offset,
 }: {
   jsonObject: any;
   onChange: (value: any) => void;
@@ -37,6 +38,7 @@ const JsonEditor = ({
   keyStyle?: any;
   valueStyle?: any;
   buttonStyle?: any;
+  indexOffset?: number; // For offset pagination, we increment the displayed index by this amount to reflect the current page
 }): JSX.Element => {
   const jsonBoxRef = useRef<HTMLDivElement>(null);
   const defaultStyle = useContext(UserContext);
@@ -59,6 +61,7 @@ const JsonEditor = ({
           hideInsertObjectButton={hideInsertObjectButton}
           expandToGeneration={expandToGeneration}
           isReadOnly={isReadOnly}
+          indexOffset={offset}
         />
       </div>
     </UserContext.Provider>

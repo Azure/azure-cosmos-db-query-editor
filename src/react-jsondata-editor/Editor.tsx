@@ -29,6 +29,7 @@ export default function Editor({
   hideInsertObjectButton,
   expandToGeneration,
   isReadOnly,
+  indexOffset,
 }: {
   input: string;
   jsonBoxRef: React.RefObject<HTMLDivElement>;
@@ -36,6 +37,7 @@ export default function Editor({
   hideInsertObjectButton: boolean;
   expandToGeneration: number;
   isReadOnly: boolean;
+  indexOffset?: number; // For offset pagination, we increment the displayed index by this amount
 }) {
   const emptyValues: {
     path: string | undefined;
@@ -334,6 +336,7 @@ export default function Editor({
             createModal={createModal}
             expandToGeneration={expandToGeneration}
             isReadOnly={isReadOnly}
+            indexOffset={indexOffset}
           />
         </div>
       </div>
