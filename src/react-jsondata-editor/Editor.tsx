@@ -1,3 +1,4 @@
+/// <reference types="./lib/declaration.d.ts" />
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as styles from "./lib/styles.module.css";
 import DeepCopy from "./lib/DeepCopy";

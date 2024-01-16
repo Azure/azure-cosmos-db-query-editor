@@ -376,7 +376,7 @@ function NullEditor({
 
   useEffect(() => {
     pointer.set(modalObj, path + "/" + inputField, null);
-  }, []);
+  }); // TODO: add modalObj, path and inputField to dependency array?
 
   function ChangeType(newType: string) {
     pointer.set(modalObj, path + "/" + field, setDefaultValue(newType));
@@ -1154,7 +1154,7 @@ function ObjectEditor({
   useEffect(() => {
     pointer.set(modalObj, path + "/" + ObjField + "/" + "", "");
     setRender(!render);
-  }, []);
+  }, [setRender, modalObj, path, ObjField, render]);
 
   useEffect(() => {
     setHasEmptyField(false);

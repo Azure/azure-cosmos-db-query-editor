@@ -12,5 +12,5 @@
     "skipLibCheck": true,
   },
   "include": ["src"],
-  "exclude": ["testapp/**/*", "testapp"]
+  "exclude": ["testapp/**/*"]
 }
