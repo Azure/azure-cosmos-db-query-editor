@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Compile TypeScript"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16.x
       - run: npm i && npm run pretest
@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Format check and lint"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16.x
       - run: npm i && npm run format:check && npm run lint
@@ -29,9 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Unit Tests"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16.x
       - run: npm i && npm t
@@ -39,9 +39,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Build lib"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16.x
       - run: npm i && npm run build
