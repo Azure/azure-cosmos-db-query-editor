@@ -37,8 +37,8 @@ jobs:
     displayName: 'npm install'
   - script: npm t
     displayName: 'Run unit tests'
-  - script: npm pack
-    displayName: 'Package'
+  - script: npm run publish
+    displayName: 'Publish'
   - task: AzureArtifacts.manifest-generator-task.manifest-generator-task.ManifestGeneratorTask@0
     displayName: 'SBOM'
     inputs:
