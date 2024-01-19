@@ -443,7 +443,12 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
                   isReadOnly={true}
                   indexOffset={
                     (props.queryResult?.pagingInfo as ResultOffsetPagingInfo)
-                      ?.offset
+                      ?.offset === undefined
+                      ? undefined
+                      : (
+                          props.queryResult
+                            ?.pagingInfo as ResultOffsetPagingInfo
+                        )?.offset + 1
                   }
                 />
               </div>
@@ -476,13 +481,17 @@ const OffsetPaginator = (props: {
 
   const { limit, offset, total } = props.pagingInfo;
 
+  if (total !== undefined && total <= 0) {
+    return <></>;
+  }
+
   return (
     <span style={{ display: "flex", columnGap: 10 }}>
       {offset !== undefined && limit !== undefined ? (
         <span>
           {/* The -1 are for 0-based index */}
-          {offset} to {(offset + limit > total ? total : offset + limit) - 1} of{" "}
-          {total - 1}
+          {offset + 1} to {offset + limit > total ? total : offset + limit} of{" "}
+          {total}
         </span>
       ) : (
         <span>Error offset or limit not specified</span>
