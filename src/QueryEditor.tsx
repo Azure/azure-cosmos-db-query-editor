@@ -481,6 +481,10 @@ const OffsetPaginator = (props: {
 
   const { limit, offset, total } = props.pagingInfo;
 
+  if (total !== undefined && total <= 0) {
+    return <></>;
+  }
+
   return (
     <span style={{ display: "flex", columnGap: 10 }}>
       {offset !== undefined && limit !== undefined ? (
