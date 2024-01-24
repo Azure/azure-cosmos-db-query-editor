@@ -22,6 +22,7 @@ import {
   ArrowLeft12Regular,
   ArrowRight12Regular,
 } from "@fluentui/react-icons";
+import RunQuery from "data-url:./images/RunQuery.png"; // data-url tells parcel to inline the image as base64. Otherwise the webview cannot find the image
 
 /**
  * Query result offset paging information
@@ -459,6 +460,14 @@ export const QueryEditor = (props: QueryEditorProps): JSX.Element => {
               </div>
             )}
           </>
+        )}
+        {!props.progress?.spinner && !queryResult && (
+          <div style={{ margin: "auto", textAlign: "center" }}>
+            <p>
+              <img src={RunQuery} alt="Execute Query Watermark" />
+            </p>
+            <p>Execute a query to see the results</p>
+          </div>
         )}
       </div>
     </Split>
