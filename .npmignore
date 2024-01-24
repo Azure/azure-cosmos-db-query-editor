@@ -12,3 +12,4 @@ azure-pipelines.yml
 jest.config.js
 .parcel.d.ts
 tsconfig.json
+src/
